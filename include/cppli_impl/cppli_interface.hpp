@@ -14,13 +14,14 @@ class Cppli {
 
     virtual ~Cppli() = default;
 
-    virtual Argument* addArgument(const ArgumentBuilder& builder) = 0;
+    virtual Argument* addArgument(const ArgumentSpec& builder) = 0;
 
-    virtual IntArgument* addIntArgument(const IntArgumentBuilder& builder) = 0;
+    virtual IntArgument* addIntArgument(const IntArgumentSpec& builder) = 0;
 
-    virtual Flag* addFlag(const FlagBuilder& builder) = 0;
+    virtual Flag* addFlag(const FlagSpec& builder) = 0;
 
-    virtual std::vector<std::string> interpret(const std::vector<std::string>& argv) = 0;
+    virtual std::vector<std::string> interpret(
+        const std::vector<std::string>& argv) = 0;
 
     std::vector<std::string> interpret(int argc, char** argv);
 

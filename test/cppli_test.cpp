@@ -15,79 +15,81 @@ using namespace std;
 void kkTestCase(Cppli) {
     Cppli* cppli = nullptr;
 
-    auto interpretArgs = [&](const initializer_list<string>& args) {
-        return cppli->interpret(args);
-    };
+    setUp([&] {
+        cppli = Cppli::create("Help prefix.");
+    });
 
-    setUp([&] { cppli = Cppli::create("Help prefix."); });
-    tearDown([&] { delete cppli; cppli = nullptr; });
+    tearDown([&] {
+        delete cppli;
+        cppli = nullptr;
+    });
 
     group("Single string argument", [&] {
         Argument* arg = nullptr;
 
         setUp([&] {
-            arg = cppli->addArgument(ArgumentBuilder("name", "Description.")
+            arg = cppli->addArgument(ArgumentSpec("name", "Description.")
                                            .withShortName("n")
                                            .withDefaultValue("a")
                                            .withImplicitValue("b"));
         });
 
         test("no value provided leads to argument taking default value", [&] {
-            interpretArgs({});
+            cppli->interpret({});
             expect(arg->get(), isEqualTo("a"));
         });
 
         test("provided with single dash, short name", [&] {
-            interpretArgs({"-n"});
+            cppli->interpret({"-n"});
             expect(arg->get(), isEqualTo("b"));
         });
 
         test("provided with double dash, short name", [&] {
-            interpretArgs({"--n"});
+            cppli->interpret({"--n"});
             expect(arg->get(), isEqualTo("b"));
         });
 
         test("provided with double dash, long name", [&] {
-            interpretArgs({"--name"});
+            cppli->interpret({"--name"});
             expect(arg->get(), isEqualTo("b"));
         });
 
         test("value provided with single dash & space", [&] {
-            interpretArgs({"-n", "v"});
+            cppli->interpret({"-n", "v"});
             expect(arg->get(), isEqualTo("v"));
         });
 
         test("value provided with single dash & equal sign", [&] {
-            interpretArgs({"-n=v"});
+            cppli->interpret({"-n=v"});
             expect(arg->get(), isEqualTo("v"));
         });
 
         test("value provided with double dash & space is positional, while "
              "the argument takes implicit value", [&] {
-            auto positionalArgs = interpretArgs({"--name", "v"});
+            auto positionalArgs = cppli->interpret({"--name", "v"});
             expect(arg->get(), isEqualTo("b"));
             expect(positionalArgs, isEqualTo(vector<string>{"v"}));
         });
 
         test("value provided with double dash & equal sign (short name)", [&] {
-            interpretArgs({"--n=v"});
+            cppli->interpret({"--n=v"});
             expect(arg->get(), isEqualTo("v"));
         });
 
         test("value provided with double dash & equal sign (long name)", [&] {
-            interpretArgs({"--name=v"});
+            cppli->interpret({"--name=v"});
             expect(arg->get(), isEqualTo("v"));
         });
 
         test("providing value for different argument name does not influence"
              " interesting argument", [&] {
-            interpretArgs({"-m", "v"});
+            cppli->interpret({"-m", "v"});
             expect(arg->get(), isEqualTo("a"));
         });
 
         test("when providing multiple values for one argument, it takes the "
              "last one", [&] {
-            interpretArgs({"-n", "v1", "-n", "--name=v2"});
+            cppli->interpret({"-n", "v1", "-n", "--name=v2"});
             expect(arg->get(), isEqualTo("v2"));
         });
     });
@@ -98,22 +100,22 @@ void kkTestCase(Cppli) {
         Argument* c = nullptr;
 
         setUp([&] {
-            a = cppli->addArgument(ArgumentBuilder("arg_a", "Description a.")
+            a = cppli->addArgument(ArgumentSpec("arg_a", "Description a.")
                                          .withShortName("a")
                                          .withDefaultValue("default")
                                          .withImplicitValue("implicit"));
-            b = cppli->addArgument(ArgumentBuilder("arg_b", "Description b.")
+            b = cppli->addArgument(ArgumentSpec("arg_b", "Description b.")
                                          .withShortName("b")
                                          .withDefaultValue("default")
                                          .withImplicitValue("implicit"));
-            c = cppli->addArgument(ArgumentBuilder("arg_c", "Description c.")
+            c = cppli->addArgument(ArgumentSpec("arg_c", "Description c.")
                                          .withShortName("c")
                                          .withDefaultValue("default")
                                          .withImplicitValue("implicit"));
         });
 
         test("Providing values for multiple arguments via double dash", [&] {
-            interpretArgs({"--arg_a=value", "--b"});
+            cppli->interpret({"--arg_a=value", "--b"});
             expect(a->get(), isEqualTo("value"));
             expect(b->get(), isEqualTo("implicit"));
             expect(c->get(), isEqualTo("default"));
@@ -121,7 +123,7 @@ void kkTestCase(Cppli) {
 
         test("Providing values for multiple arguments with multiple single "
              "dash arguments", [&] {
-            interpretArgs({"-a", "-b", "value"});
+            cppli->interpret({"-a", "-b", "value"});
             expect(a->get(), isEqualTo("implicit"));
             expect(b->get(), isEqualTo("value"));
             expect(c->get(), isEqualTo("default"));
@@ -129,7 +131,7 @@ void kkTestCase(Cppli) {
 
         test("Providing implicit values for multiple arguments via a single"
              " dash argument", [&] {
-            interpretArgs({"-ab"});
+            cppli->interpret({"-ab"});
             expect(a->get(), isEqualTo("implicit"));
             expect(b->get(), isEqualTo("implicit"));
             expect(c->get(), isEqualTo("default"));
@@ -137,7 +139,7 @@ void kkTestCase(Cppli) {
 
         test("Providing values for multiple arguments via a single dash"
              "argument & space for non-implicit value of the last one", [&] {
-            interpretArgs({"-abc", "value"});
+            cppli->interpret({"-abc", "value"});
             expect(a->get(), isEqualTo("implicit"));
             expect(b->get(), isEqualTo("implicit"));
             expect(c->get(), isEqualTo("value"));
@@ -146,7 +148,7 @@ void kkTestCase(Cppli) {
         test("Providing values for multiple arguments via a single dash"
              "argument & equal sign for non-implicit value of the last one",
              [&] {
-                 interpretArgs({"-abc=value"});
+                 cppli->interpret({"-abc=value"});
                  expect(a->get(), isEqualTo("implicit"));
                  expect(b->get(), isEqualTo("implicit"));
                  expect(c->get(), isEqualTo("value"));
@@ -158,10 +160,10 @@ void kkTestCase(Cppli) {
         Flag* b = nullptr;
 
         setUp([&] {
-            a = cppli->addFlag(FlagBuilder("flag_a", "Description a.")
-                                     .withShortName("a"));
-            b = cppli->addFlag(FlagBuilder("flag_b", "Description b.")
-                                     .withShortName("b"));
+            a = cppli->addFlag(FlagSpec("flag_a", "Description a.")
+                               .withShortName("a"));
+            b = cppli->addFlag(FlagSpec("flag_b", "Description b.")
+                               .withShortName("b"));
         });
 
         test("Default flag value is false", [&] {
@@ -170,41 +172,30 @@ void kkTestCase(Cppli) {
         });
 
         test("Implicit flag value is true", [&] {
-            interpretArgs({"--flag_a"});
+            cppli->interpret({"--flag_a"});
             expect(a->get(), isTrue);
             expect(b->get(), isFalse);
 
-            interpretArgs({"--a"});
+            cppli->interpret({"--a"});
             expect(a->get(), isTrue);
             expect(b->get(), isFalse);
 
-            interpretArgs({"-ab", "-a"});
+            cppli->interpret({"-ab", "-a"});
             expect(a->get(), isTrue);
             expect(b->get(), isTrue);
         });
 
-        test("Passing a flag value '1', 'TRUE' or 'ENABLED' makes it true "
-             "(case insensitive)", [&] {
-            interpretArgs({"--flag_a=true"});
-            expect(a->get(), isTrue);
-
-            interpretArgs({"--flag_a=enabled"});
-            expect(a->get(), isTrue);
-
-            interpretArgs({"--flag_a=1"});
-            expect(a->get(), isTrue);
+        test("Passing a flag values throws", [&] {
+            expect([&] {
+                cppli->interpret({"--flag_a=enabled"});
+            }, throws);
         });
 
-        test("Passing a flag any other value makes it false", [&] {
-            interpretArgs({"--flag_b=DISABLED"});
-            expect(b->get(), isFalse);
-
-            interpretArgs({"--flag_b=ANYTHING_ELSE"});
-            expect(b->get(), isFalse);
-
-            // take care with typo-s!
-            interpretArgs({"--flag_b=ENABLD"});
-            expect(b->get(), isFalse);
+        test("Single dash flag does not associate with the following "
+             "positional argument", [&] {
+            auto positional = cppli->interpret({"-a", "enabled"});
+            expect(positional, isEqualTo(vector<string>{"enabled"}));
+            expect(a->get(), isTrue);
         });
     });
 
@@ -212,70 +203,72 @@ void kkTestCase(Cppli) {
         IntArgument* arg = nullptr;
 
         setUp([&] {
-            arg = cppli->addIntArgument(IntArgumentBuilder("name", "Description.")
-                                              .withShortName("n")
-                                              .withDefaultValue(0)
-                                              .withImplicitValue(1));
+            arg = cppli->addIntArgument(IntArgumentSpec("name", "Description.")
+                                        .withShortName("n")
+                                        .withDefaultValue(0)
+                                        .withImplicitValue(1));
         });
 
         test("Passing an integer argument an integer value works", [&] {
-            interpretArgs({"--name=17"});
+            cppli->interpret({"--name=17"});
             expect(arg->get(), isEqualTo(17));
 
-            interpretArgs({"--name=-7"});
+            cppli->interpret({"--name=-7"});
             expect(arg->get(), isEqualTo(-7));
 
-            interpretArgs({"-n", "1337"});
+            cppli->interpret({"-n", "1337"});
             expect(arg->get(), isEqualTo(1337));
         });
 
         test("Passing an integer argument a non-integer value throws", [&] {
-            expect([&] { interpretArgs({"--name=invalid"}); }, throws);
+            expect([&] {
+                cppli->interpret({"--name=invalid"});
+            }, throws);
         });
     });
 
     group("Invalid argument names", [&] {
         test("Registering an argument with the same name as an existing one "
              "throws", [&] {
-            cppli->addArgument(ArgumentBuilder("name", "description 1"));
+            cppli->addArgument(ArgumentSpec("name", "description 1"));
             expect([&] {
-                cppli->addArgument(ArgumentBuilder("name", "description 2"));
+                cppli->addArgument(ArgumentSpec("name", "description 2"));
             }, throws);
         });
 
         test("Registering an argument with the same name as an existing one's "
              "short name throws", [&] {
-            cppli->addArgument(ArgumentBuilder("name", "description 1")
-                                     .withShortName("n"));
+            cppli->addArgument(ArgumentSpec("name", "description 1")
+                               .withShortName("n"));
             expect([&] {
-                cppli->addArgument(ArgumentBuilder("n", "description 2"));
+                cppli->addArgument(ArgumentSpec("n", "description 2"));
             }, throws);
         });
 
         test("Registering an argument with the same short name as an existing "
              "one's name throws", [&] {
-            cppli->addArgument(ArgumentBuilder("n", "description 1"));
+            cppli->addArgument(ArgumentSpec("n", "description 1"));
             expect([&] {
-                cppli->addArgument(ArgumentBuilder("name", "description 2")
-                                         .withShortName("n"));
+                cppli->addArgument(ArgumentSpec("name", "description 2")
+                                   .withShortName("n"));
             }, throws);
         });
 
         test("Registering an argument with the same short name as an existing "
              "one's short name throws", [&] {
-            cppli->addArgument(ArgumentBuilder("name", "description 1")
-                                     .withShortName("n"));
+            cppli->addArgument(ArgumentSpec("name", "description 1")
+                               .withShortName("n"));
             expect([&] {
-                cppli->addArgument(ArgumentBuilder("name2", "description 2")
-                                         .withShortName("n"));
+                cppli->addArgument(ArgumentSpec("name2", "description 2")
+                                   .withShortName("n"));
             }, throws);
         });
 
         test("Registering an argument with a short name that is longer than "
              "one character throws", [&] {
             expect([&] {
-                cppli->addArgument(ArgumentBuilder("name", "description")
-                                         .withShortName("nnn"));
+                cppli->addArgument(ArgumentSpec("name", "description")
+                                   .withShortName("nnn"));
             }, throws);
         });
     });

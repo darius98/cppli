@@ -19,10 +19,12 @@ FlagImpl::FlagImpl(): GenericArgumentImpl<bool>(false, true) {}
 
 FlagImpl::~FlagImpl() = default;
 
+bool FlagImpl::supportsValue() const {
+    return false;
+}
+
 void FlagImpl::setValue(const string& _value) {
-    value = _value == "true"
-            || _value == "1"
-            || _value == "enabled";
+    throw invalid_argument("Tried to give value `" + _value + "` to a flag!");
 }
 
 IntArgumentImpl::IntArgumentImpl(int defaultValue, int implicitValue):

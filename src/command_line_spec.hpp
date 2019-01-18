@@ -9,6 +9,10 @@ class CommandLineSpec {
  public:
     virtual ~CommandLineSpec() = default;
 
+    virtual bool supportsValue() const {
+        return true;
+    }
+
     virtual void setDefault() = 0;
 
     virtual void setImplicit() = 0;

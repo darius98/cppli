@@ -49,6 +49,8 @@ class FlagImpl: public GenericArgumentImpl<bool> {
 
     ~FlagImpl() override;
 
+    bool supportsValue() const override;
+
     void setValue(const std::string& _value) override;
 };
 

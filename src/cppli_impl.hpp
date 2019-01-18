@@ -16,13 +16,14 @@ class CppliImpl: public Cppli {
 
     ~CppliImpl() override;
 
-    Argument* addArgument(const ArgumentBuilder& builder) override;
+    Argument* addArgument(const ArgumentSpec& builder) override;
 
-    IntArgument* addIntArgument(const IntArgumentBuilder& builder) override;
+    IntArgument* addIntArgument(const IntArgumentSpec& builder) override;
 
-    Flag* addFlag(const FlagBuilder& builder) override;
+    Flag* addFlag(const FlagSpec& builder) override;
 
-    std::vector<std::string> interpret(const std::vector<std::string>& args) override;
+    std::vector<std::string> interpret(
+        const std::vector<std::string>& args) override;
 
     void addHelpFlag() override;
 
@@ -39,7 +40,10 @@ class CppliImpl: public Cppli {
     void checkNameAvailability(const std::string& name,
                                const std::string& shortName) const;
 
-    void applyValue(const std::string& commandLineString, const std::string& value);
+    bool shouldApplyValue(const std::string& commandLineString) const;
+
+    void applyValue(const std::string& commandLineString,
+                    const std::string& value);
 
     void applyImplicit(const std::string& commandLineString);
 

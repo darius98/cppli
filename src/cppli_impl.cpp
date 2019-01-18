@@ -16,7 +16,7 @@ CppliImpl::~CppliImpl() {
     }
 }
 
-Argument* CppliImpl::addArgument(const ArgumentBuilder& builder) {
+Argument* CppliImpl::addArgument(const ArgumentSpec& builder) {
     checkNameAvailability(builder.name, builder.shortName);
     auto spec = new ArgumentImpl(builder.defaultValue, builder.implicitValue);
     addSpec(spec,
@@ -28,8 +28,7 @@ Argument* CppliImpl::addArgument(const ArgumentBuilder& builder) {
     return spec;
 }
 
-IntArgument* CppliImpl::addIntArgument(
-        const IntArgumentBuilder& builder) {
+IntArgument* CppliImpl::addIntArgument(const IntArgumentSpec& builder) {
     checkNameAvailability(builder.name, builder.shortName);
     auto spec = new IntArgumentImpl(builder.defaultValue,
                                     builder.implicitValue);
@@ -42,7 +41,7 @@ IntArgument* CppliImpl::addIntArgument(
     return spec;
 }
 
-Flag* CppliImpl::addFlag(const FlagBuilder& builder) {
+Flag* CppliImpl::addFlag(const FlagSpec& builder) {
     checkNameAvailability(builder.name, builder.shortName);
     auto spec = new FlagImpl();
     addSpec(spec, builder.name, builder.helpText, builder.shortName, "", "");
@@ -76,15 +75,15 @@ vector<string> CppliImpl::interpret(const vector<string>& args) {
         // positional argument or a value filler for the last unfulfilled short
         // name argument given in the format "-XYZ".
         if (arg.substr(0, 1) != "-" || arg == "-") {
-            if (lastShortName.empty()) {
-                // no unfulfilled argument given by short name, considering a
-                // positional argument.
-                positionalArguments.push_back(arg);
-            } else {
+            if (shouldApplyValue(lastShortName)) {
                 // `lastShortName` is an unfulfilled argument given by short
                 // name in the format "-XYZ v" as "Z".
                 applyValue(lastShortName, arg);
                 lastShortName = "";
+            } else {
+                // no unfulfilled argument given by short name, considering a
+                // positional argument.
+                positionalArguments.push_back(arg);
             }
             continue;
         }
@@ -137,7 +136,7 @@ vector<string> CppliImpl::interpret(const vector<string>& args) {
 }
 
 void CppliImpl::addHelpFlag() {
-    helpFlag = addFlag(FlagBuilder("help", "Display this help menu.")
+    helpFlag = addFlag(FlagSpec("help", "Display this help menu.")
                        .withShortName("h"));
 }
 
@@ -149,11 +148,11 @@ void CppliImpl::checkHelpFlag() {
 }
 
 void CppliImpl::addSpec(CommandLineSpec* spec,
-                               const string& name,
-                               const string& helpText,
-                               const string& shortName,
-                               const string& defaultValue,
-                               const string& implicitValue) {
+                        const string& name,
+                        const string& helpText,
+                        const string& shortName,
+                        const string& defaultValue,
+                        const string& implicitValue) {
     string helpLine = "\n\t--" + name;
     if (!shortName.empty()) {
         helpLine += ",-" + shortName;
@@ -183,7 +182,7 @@ void CppliImpl::addSpec(CommandLineSpec* spec,
 }
 
 void CppliImpl::checkNameAvailability(const string& name,
-                                             const string& shortName) const {
+                                      const string& shortName) const {
     if (reservedNames.count(name) != 0) {
         throw runtime_error(
                 "Argument tried to register " + name + " as a command-line name, "
@@ -200,8 +199,14 @@ void CppliImpl::checkNameAvailability(const string& name,
     }
 }
 
+bool CppliImpl::shouldApplyValue(const string& commandLineString) const {
+    auto specIterator = specsByCommandLineString.find(commandLineString);
+    return specIterator != specsByCommandLineString.end()
+           && specIterator->second->supportsValue();
+}
+
 void CppliImpl::applyValue(const string& commandLineString,
-                                  const string& value) {
+                           const string& value) {
     auto specIterator = specsByCommandLineString.find(commandLineString);
     if (specIterator != specsByCommandLineString.end()) {
         specIterator->second->setValue(value);

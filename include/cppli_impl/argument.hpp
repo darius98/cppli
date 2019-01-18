@@ -13,41 +13,51 @@ class GenericArgument {
     virtual T get() const = 0;
 };
 
-template<class T>
-struct GenericArgumentBuilder {
-    GenericArgumentBuilder(std::string _name, std::string _helpText):
+struct GenericArgumentSpec {
+    GenericArgumentSpec(std::string _name, std::string _helpText):
             name(std::move(_name)), helpText(std::move(_helpText)) {}
 
-    GenericArgumentBuilder& withShortName(const std::string& _shortName) {
+    virtual GenericArgumentSpec& withShortName(const std::string& _shortName) {
         shortName = _shortName;
-        return *this;
-    }
-
-    GenericArgumentBuilder& withDefaultValue(const T& _defaultValue) {
-        defaultValue = _defaultValue;
-        return *this;
-    }
-
-    GenericArgumentBuilder& withImplicitValue(const T& _implicitValue) {
-        implicitValue = _implicitValue;
         return *this;
     }
 
     std::string name;
     std::string helpText;
     std::string shortName;
+};
+
+template<class T>
+struct DefaultImplicitValueSpec: public GenericArgumentSpec {
+    using GenericArgumentSpec::GenericArgumentSpec;
+
+    DefaultImplicitValueSpec& withShortName(const std::string& _shortName) override {
+        shortName = _shortName;
+        return *this;
+    }
+
+    DefaultImplicitValueSpec& withDefaultValue(const T& _defaultValue) {
+        defaultValue = _defaultValue;
+        return *this;
+    }
+
+    DefaultImplicitValueSpec& withImplicitValue(const T& _implicitValue) {
+        implicitValue = _implicitValue;
+        return *this;
+    }
+
     T defaultValue;
     T implicitValue;
 };
 
 typedef GenericArgument<std::string> Argument;
-typedef GenericArgumentBuilder<std::string> ArgumentBuilder;
+typedef DefaultImplicitValueSpec<std::string> ArgumentSpec;
 
 typedef GenericArgument<bool> Flag;
-typedef GenericArgumentBuilder<bool> FlagBuilder;
+typedef GenericArgumentSpec FlagSpec;
 
 typedef GenericArgument<int> IntArgument;
-typedef GenericArgumentBuilder<int> IntArgumentBuilder;
+typedef DefaultImplicitValueSpec<int> IntArgumentSpec;
 
 }
 

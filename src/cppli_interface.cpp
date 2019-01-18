@@ -10,8 +10,7 @@ Cppli* Cppli::create(const string& helpPrefix) {
 }
 
 vector<string> Cppli::interpret(int argc, char** argv) {
-    vector<string> args;
-    args.reserve(static_cast<size_t>(argc));
+    vector<string> args(static_cast<size_t>(argc));
     for (int i = 0; i < argc; ++ i) {
         args.emplace_back(argv[i]);
     }
