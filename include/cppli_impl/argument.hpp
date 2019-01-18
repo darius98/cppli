@@ -5,59 +5,27 @@
 
 namespace cppli {
 
-template<class T>
-class GenericArgument {
+class Argument {
  public:
-    virtual ~GenericArgument() = default;
+    virtual ~Argument();
 
-    virtual T get() const = 0;
+    virtual std::string get() const = 0;
 };
 
-struct GenericArgumentSpec {
-    GenericArgumentSpec(std::string _name, std::string _helpText):
-            name(std::move(_name)), helpText(std::move(_helpText)) {}
+struct ArgumentSpec {
+    explicit ArgumentSpec(std::string _name);
 
-    virtual GenericArgumentSpec& withShortName(const std::string& _shortName) {
-        shortName = _shortName;
-        return *this;
-    }
+    ArgumentSpec& withHelpText(const std::string& _helpText);
+    ArgumentSpec& withShortName(const std::string& _shortName);
+    ArgumentSpec& withDefaultValue(const std::string& _defaultValue);
+    ArgumentSpec& withImplicitValue(const std::string& _implicitValue);
 
     std::string name;
-    std::string helpText;
-    std::string shortName;
+    std::string helpText = "";
+    std::string shortName = "";
+    std::string defaultValue = "";
+    std::string implicitValue = "";
 };
-
-template<class T>
-struct DefaultImplicitValueSpec: public GenericArgumentSpec {
-    using GenericArgumentSpec::GenericArgumentSpec;
-
-    DefaultImplicitValueSpec& withShortName(const std::string& _shortName) override {
-        shortName = _shortName;
-        return *this;
-    }
-
-    DefaultImplicitValueSpec& withDefaultValue(const T& _defaultValue) {
-        defaultValue = _defaultValue;
-        return *this;
-    }
-
-    DefaultImplicitValueSpec& withImplicitValue(const T& _implicitValue) {
-        implicitValue = _implicitValue;
-        return *this;
-    }
-
-    T defaultValue;
-    T implicitValue;
-};
-
-typedef GenericArgument<std::string> Argument;
-typedef DefaultImplicitValueSpec<std::string> ArgumentSpec;
-
-typedef GenericArgument<bool> Flag;
-typedef GenericArgumentSpec FlagSpec;
-
-typedef GenericArgument<int> IntArgument;
-typedef DefaultImplicitValueSpec<int> IntArgumentSpec;
 
 }
 

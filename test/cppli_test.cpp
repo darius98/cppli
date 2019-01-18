@@ -28,10 +28,10 @@ void kkTestCase(Cppli) {
         Argument* arg = nullptr;
 
         setUp([&] {
-            arg = cppli->addArgument(ArgumentSpec("name", "Description.")
-                                           .withShortName("n")
-                                           .withDefaultValue("a")
-                                           .withImplicitValue("b"));
+            arg = cppli->addArgument(ArgumentSpec("name")
+                                     .withShortName("n")
+                                     .withDefaultValue("a")
+                                     .withImplicitValue("b"));
         });
 
         test("no value provided leads to argument taking default value", [&] {
@@ -100,18 +100,18 @@ void kkTestCase(Cppli) {
         Argument* c = nullptr;
 
         setUp([&] {
-            a = cppli->addArgument(ArgumentSpec("arg_a", "Description a.")
-                                         .withShortName("a")
-                                         .withDefaultValue("default")
-                                         .withImplicitValue("implicit"));
-            b = cppli->addArgument(ArgumentSpec("arg_b", "Description b.")
-                                         .withShortName("b")
-                                         .withDefaultValue("default")
-                                         .withImplicitValue("implicit"));
-            c = cppli->addArgument(ArgumentSpec("arg_c", "Description c.")
-                                         .withShortName("c")
-                                         .withDefaultValue("default")
-                                         .withImplicitValue("implicit"));
+            a = cppli->addArgument(ArgumentSpec("arg_a")
+                                   .withShortName("a")
+                                   .withDefaultValue("default")
+                                   .withImplicitValue("implicit"));
+            b = cppli->addArgument(ArgumentSpec("arg_b")
+                                   .withShortName("b")
+                                   .withDefaultValue("default")
+                                   .withImplicitValue("implicit"));
+            c = cppli->addArgument(ArgumentSpec("arg_c")
+                                   .withShortName("c")
+                                   .withDefaultValue("default")
+                                   .withImplicitValue("implicit"));
         });
 
         test("Providing values for multiple arguments via double dash", [&] {
@@ -160,10 +160,8 @@ void kkTestCase(Cppli) {
         Flag* b = nullptr;
 
         setUp([&] {
-            a = cppli->addFlag(FlagSpec("flag_a", "Description a.")
-                               .withShortName("a"));
-            b = cppli->addFlag(FlagSpec("flag_b", "Description b.")
-                               .withShortName("b"));
+            a = cppli->addFlag(FlagSpec("flag_a").withShortName("a"));
+            b = cppli->addFlag(FlagSpec("flag_b").withShortName("b"));
         });
 
         test("Default flag value is false", [&] {
@@ -203,7 +201,7 @@ void kkTestCase(Cppli) {
         IntArgument* arg = nullptr;
 
         setUp([&] {
-            arg = cppli->addIntArgument(IntArgumentSpec("name", "Description.")
+            arg = cppli->addIntArgument(IntArgumentSpec("name")
                                         .withShortName("n")
                                         .withDefaultValue(0)
                                         .withImplicitValue(1));
@@ -230,45 +228,40 @@ void kkTestCase(Cppli) {
     group("Invalid argument names", [&] {
         test("Registering an argument with the same name as an existing one "
              "throws", [&] {
-            cppli->addArgument(ArgumentSpec("name", "description 1"));
+            cppli->addArgument(ArgumentSpec("name"));
             expect([&] {
-                cppli->addArgument(ArgumentSpec("name", "description 2"));
+                cppli->addArgument(ArgumentSpec("name"));
             }, throws);
         });
 
         test("Registering an argument with the same name as an existing one's "
              "short name throws", [&] {
-            cppli->addArgument(ArgumentSpec("name", "description 1")
-                               .withShortName("n"));
+            cppli->addArgument(ArgumentSpec("name").withShortName("n"));
             expect([&] {
-                cppli->addArgument(ArgumentSpec("n", "description 2"));
+                cppli->addArgument(ArgumentSpec("n"));
             }, throws);
         });
 
         test("Registering an argument with the same short name as an existing "
              "one's name throws", [&] {
-            cppli->addArgument(ArgumentSpec("n", "description 1"));
+            cppli->addArgument(ArgumentSpec("n"));
             expect([&] {
-                cppli->addArgument(ArgumentSpec("name", "description 2")
-                                   .withShortName("n"));
+                cppli->addArgument(ArgumentSpec("name").withShortName("n"));
             }, throws);
         });
 
         test("Registering an argument with the same short name as an existing "
              "one's short name throws", [&] {
-            cppli->addArgument(ArgumentSpec("name", "description 1")
-                               .withShortName("n"));
+            cppli->addArgument(ArgumentSpec("name").withShortName("n"));
             expect([&] {
-                cppli->addArgument(ArgumentSpec("name2", "description 2")
-                                   .withShortName("n"));
+                cppli->addArgument(ArgumentSpec("name2").withShortName("n"));
             }, throws);
         });
 
         test("Registering an argument with a short name that is longer than "
              "one character throws", [&] {
             expect([&] {
-                cppli->addArgument(ArgumentSpec("name", "description")
-                                   .withShortName("nnn"));
+                cppli->addArgument(ArgumentSpec("name").withShortName("nnn"));
             }, throws);
         });
     });

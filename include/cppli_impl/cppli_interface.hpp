@@ -5,6 +5,8 @@
 #include <vector>
 
 #include <cppli_impl/argument.hpp>
+#include <cppli_impl/flag.hpp>
+#include <cppli_impl/int_argument.hpp>
 
 namespace cppli {
 
