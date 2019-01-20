@@ -15,8 +15,8 @@ class Flag {
 struct FlagSpec {
     explicit FlagSpec(std::string _name);
 
-    FlagSpec& withHelpText(const std::string& _helpText);
-    FlagSpec& withShortName(const std::string& _shortName);
+    FlagSpec& setDescription(const std::string& _helpText);
+    FlagSpec& setShortName(const std::string& _shortName);
 
     std::string name;
     std::string helpText = "";

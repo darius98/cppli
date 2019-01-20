@@ -8,22 +8,22 @@ IntArgument::~IntArgument() = default;
 
 IntArgumentSpec::IntArgumentSpec(string _name): name(move(_name)) {}
 
-IntArgumentSpec& IntArgumentSpec::withHelpText(const string& _helpText) {
+IntArgumentSpec& IntArgumentSpec::setDescription(const string& _helpText) {
     helpText = _helpText;
     return *this;
 }
 
-IntArgumentSpec& IntArgumentSpec::withShortName(const string& _shortName) {
+IntArgumentSpec& IntArgumentSpec::setShortName(const string& _shortName) {
     shortName = _shortName;
     return *this;
 }
 
-IntArgumentSpec& IntArgumentSpec::withDefaultValue(int _defaultValue) {
+IntArgumentSpec& IntArgumentSpec::setDefaultValue(int _defaultValue) {
     defaultValue = _defaultValue;
     return *this;
 }
 
-IntArgumentSpec& IntArgumentSpec::withImplicitValue(int _implicitValue) {
+IntArgumentSpec& IntArgumentSpec::setImplicitValue(int _implicitValue) {
     implicitValue = _implicitValue;
     return *this;
 }

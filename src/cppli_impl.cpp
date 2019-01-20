@@ -137,8 +137,8 @@ vector<string> CppliImpl::interpret(const vector<string>& args) {
 
 void CppliImpl::addHelpFlag() {
     helpFlag = addFlag(FlagSpec("help")
-                       .withHelpText("Display this help menu.")
-                       .withShortName("h"));
+                       .setDescription("Display this help menu.")
+                       .setShortName("h"));
 }
 
 void CppliImpl::checkHelpFlag() {

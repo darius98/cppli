@@ -15,10 +15,10 @@ class IntArgument {
 struct IntArgumentSpec {
     explicit IntArgumentSpec(std::string _name);
 
-    IntArgumentSpec& withHelpText(const std::string& _helpText);
-    IntArgumentSpec& withShortName(const std::string& _shortName);
-    IntArgumentSpec& withDefaultValue(int _defaultValue);
-    IntArgumentSpec& withImplicitValue(int _implicitValue);
+    IntArgumentSpec& setDescription(const std::string& _helpText);
+    IntArgumentSpec& setShortName(const std::string& _shortName);
+    IntArgumentSpec& setDefaultValue(int _defaultValue);
+    IntArgumentSpec& setImplicitValue(int _implicitValue);
 
     std::string name;
     std::string helpText = "";

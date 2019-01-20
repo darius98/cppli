@@ -29,9 +29,9 @@ void kkTestCase(Cppli) {
 
         setUp([&] {
             arg = cppli->addArgument(ArgumentSpec("name")
-                                     .withShortName("n")
-                                     .withDefaultValue("a")
-                                     .withImplicitValue("b"));
+                                     .setShortName("n")
+                                     .setDefaultValue("a")
+                                     .setImplicitValue("b"));
         });
 
         test("no value provided leads to argument taking default value", [&] {
@@ -101,17 +101,17 @@ void kkTestCase(Cppli) {
 
         setUp([&] {
             a = cppli->addArgument(ArgumentSpec("arg_a")
-                                   .withShortName("a")
-                                   .withDefaultValue("default")
-                                   .withImplicitValue("implicit"));
+                                   .setShortName("a")
+                                   .setDefaultValue("default")
+                                   .setImplicitValue("implicit"));
             b = cppli->addArgument(ArgumentSpec("arg_b")
-                                   .withShortName("b")
-                                   .withDefaultValue("default")
-                                   .withImplicitValue("implicit"));
+                                   .setShortName("b")
+                                   .setDefaultValue("default")
+                                   .setImplicitValue("implicit"));
             c = cppli->addArgument(ArgumentSpec("arg_c")
-                                   .withShortName("c")
-                                   .withDefaultValue("default")
-                                   .withImplicitValue("implicit"));
+                                   .setShortName("c")
+                                   .setDefaultValue("default")
+                                   .setImplicitValue("implicit"));
         });
 
         test("Providing values for multiple arguments via double dash", [&] {
@@ -160,8 +160,8 @@ void kkTestCase(Cppli) {
         Flag* b = nullptr;
 
         setUp([&] {
-            a = cppli->addFlag(FlagSpec("flag_a").withShortName("a"));
-            b = cppli->addFlag(FlagSpec("flag_b").withShortName("b"));
+            a = cppli->addFlag(FlagSpec("flag_a").setShortName("a"));
+            b = cppli->addFlag(FlagSpec("flag_b").setShortName("b"));
         });
 
         test("Default flag value is false", [&] {
@@ -202,9 +202,9 @@ void kkTestCase(Cppli) {
 
         setUp([&] {
             arg = cppli->addIntArgument(IntArgumentSpec("name")
-                                        .withShortName("n")
-                                        .withDefaultValue(0)
-                                        .withImplicitValue(1));
+                                        .setShortName("n")
+                                        .setDefaultValue(0)
+                                        .setImplicitValue(1));
         });
 
         test("Passing an integer argument an integer value works", [&] {
@@ -236,7 +236,7 @@ void kkTestCase(Cppli) {
 
         test("Registering an argument with the same name as an existing one's "
              "short name throws", [&] {
-            cppli->addArgument(ArgumentSpec("name").withShortName("n"));
+            cppli->addArgument(ArgumentSpec("name").setShortName("n"));
             expect([&] {
                 cppli->addArgument(ArgumentSpec("n"));
             }, throws);
@@ -246,22 +246,22 @@ void kkTestCase(Cppli) {
              "one's name throws", [&] {
             cppli->addArgument(ArgumentSpec("n"));
             expect([&] {
-                cppli->addArgument(ArgumentSpec("name").withShortName("n"));
+                cppli->addArgument(ArgumentSpec("name").setShortName("n"));
             }, throws);
         });
 
         test("Registering an argument with the same short name as an existing "
              "one's short name throws", [&] {
-            cppli->addArgument(ArgumentSpec("name").withShortName("n"));
+            cppli->addArgument(ArgumentSpec("name").setShortName("n"));
             expect([&] {
-                cppli->addArgument(ArgumentSpec("name2").withShortName("n"));
+                cppli->addArgument(ArgumentSpec("name2").setShortName("n"));
             }, throws);
         });
 
         test("Registering an argument with a short name that is longer than "
              "one character throws", [&] {
             expect([&] {
-                cppli->addArgument(ArgumentSpec("name").withShortName("nnn"));
+                cppli->addArgument(ArgumentSpec("name").setShortName("nnn"));
             }, throws);
         });
     });
