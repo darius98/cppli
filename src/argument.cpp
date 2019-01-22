@@ -10,8 +10,13 @@ Argument::~Argument() = default;
 
 ArgumentSpec::ArgumentSpec(string _name): name(move(_name)) {}
 
-ArgumentSpec& ArgumentSpec::setDescription(const string& _helpText) {
-    helpText = _helpText;
+ArgumentSpec& ArgumentSpec::setDescription(const string& _description) {
+    description = _description;
+    return *this;
+}
+
+ArgumentSpec& ArgumentSpec::setHelpGroup(const string& _helpGroup) {
+    helpGroup = _helpGroup;
     return *this;
 }
 

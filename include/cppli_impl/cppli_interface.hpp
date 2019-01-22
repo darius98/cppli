@@ -12,6 +12,8 @@ namespace cppli {
 
 class Cppli {
  public:
+    typedef std::vector<std::string> ArgList;
+
     static Cppli* create(const std::string& helpPrefix);
 
     virtual ~Cppli() = default;
@@ -22,10 +24,9 @@ class Cppli {
 
     virtual Flag* addFlag(const FlagSpec& builder) = 0;
 
-    virtual std::vector<std::string> interpret(
-        const std::vector<std::string>& argv) = 0;
+    virtual ArgList interpret(const ArgList& argv) = 0;
 
-    std::vector<std::string> interpret(int argc, char** argv);
+    ArgList interpret(int argc, char** argv);
 
     virtual void addHelpFlag() = 0;
 

@@ -15,11 +15,13 @@ class Flag {
 struct FlagSpec {
     explicit FlagSpec(std::string _name);
 
-    FlagSpec& setDescription(const std::string& _helpText);
+    FlagSpec& setDescription(const std::string& _description);
+    FlagSpec& setHelpGroup(const std::string& _helpGroup);
     FlagSpec& setShortName(const std::string& _shortName);
 
     std::string name;
-    std::string helpText = "";
+    std::string description = "";
+    std::string helpGroup = "";
     std::string shortName = "";
 };
 

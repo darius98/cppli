@@ -15,13 +15,15 @@ class Argument {
 struct ArgumentSpec {
     explicit ArgumentSpec(std::string _name);
 
-    ArgumentSpec& setDescription(const std::string& _helpText);
+    ArgumentSpec& setDescription(const std::string& _description);
+    ArgumentSpec& setHelpGroup(const std::string& _helpGroup);
     ArgumentSpec& setShortName(const std::string& _shortName);
     ArgumentSpec& setDefaultValue(const std::string& _defaultValue);
     ArgumentSpec& setImplicitValue(const std::string& _implicitValue);
 
     std::string name;
-    std::string helpText = "";
+    std::string description = "";
+    std::string helpGroup = "";
     std::string shortName = "";
     std::string defaultValue = "";
     std::string implicitValue = "";

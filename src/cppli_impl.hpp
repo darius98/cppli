@@ -10,9 +10,14 @@
 
 namespace cppli {
 
+struct HelpGroup {
+    std::string groupName;
+    std::string content;
+};
+
 class CppliImpl: public Cppli {
  public:
-    explicit CppliImpl(std::string helpPrefix);
+    explicit CppliImpl(const std::string& _helpPrefix);
 
     ~CppliImpl() override;
 
@@ -22,20 +27,24 @@ class CppliImpl: public Cppli {
 
     Flag* addFlag(const FlagSpec& builder) override;
 
-    std::vector<std::string> interpret(
-        const std::vector<std::string>& args) override;
+    ArgList interpret(const ArgList& args) override;
 
     void addHelpFlag() override;
 
     void checkHelpFlag() override;
 
  private:
+    void addHelp(const std::string& helpGroup,
+                 const std::string& name,
+                 const std::string& shortName,
+                 const std::string& description,
+                 const std::string& extra);
+
+    std::string renderHelp() const;
+
     void addSpec(CommandLineSpec* spec,
                  const std::string& name,
-                 const std::string& helpText,
-                 const std::string& shortName,
-                 const std::string& defaultValue,
-                 const std::string& implicitValue);
+                 const std::string& shortName);
 
     void checkNameAvailability(const std::string& name,
                                const std::string& shortName) const;
@@ -52,7 +61,9 @@ class CppliImpl: public Cppli {
     std::vector<CommandLineSpec*> commandLineSpecs;
     std::map<std::string, CommandLineSpec*> specsByCommandLineString;
 
-    std::string help;
+    std::string helpPrefix;
+    std::vector<HelpGroup> helpSections;
+
     std::set<std::string> reservedNames;
 };
 

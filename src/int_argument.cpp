@@ -8,8 +8,13 @@ IntArgument::~IntArgument() = default;
 
 IntArgumentSpec::IntArgumentSpec(string _name): name(move(_name)) {}
 
-IntArgumentSpec& IntArgumentSpec::setDescription(const string& _helpText) {
-    helpText = _helpText;
+IntArgumentSpec& IntArgumentSpec::setDescription(const string& _description) {
+    description = _description;
+    return *this;
+}
+
+IntArgumentSpec& IntArgumentSpec::setHelpGroup(const string& _helpGroup) {
+    helpGroup = _helpGroup;
     return *this;
 }
 

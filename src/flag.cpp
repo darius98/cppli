@@ -8,8 +8,13 @@ Flag::~Flag() = default;
 
 FlagSpec::FlagSpec(string _name): name(move(_name)) {}
 
-FlagSpec& FlagSpec::setDescription(const string& _helpText) {
-    helpText = _helpText;
+FlagSpec& FlagSpec::setDescription(const string& _description) {
+    description = _description;
+    return *this;
+}
+
+FlagSpec& FlagSpec::setHelpGroup(const string& _helpGroup) {
+    helpGroup = _helpGroup;
     return *this;
 }
 

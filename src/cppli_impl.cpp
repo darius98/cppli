@@ -8,7 +8,8 @@ using namespace std;
 
 namespace cppli {
 
-CppliImpl::CppliImpl(string helpPrefix): help(move(helpPrefix)) {}
+CppliImpl::CppliImpl(const string& _helpPrefix):
+        helpPrefix(_helpPrefix + "\n") {}
 
 CppliImpl::~CppliImpl() {
     for (CommandLineSpec* spec : commandLineSpecs) {
@@ -19,12 +20,16 @@ CppliImpl::~CppliImpl() {
 Argument* CppliImpl::addArgument(const ArgumentSpec& builder) {
     checkNameAvailability(builder.name, builder.shortName);
     auto spec = new ArgumentImpl(builder.defaultValue, builder.implicitValue);
-    addSpec(spec,
+    addSpec(spec, builder.name, builder.shortName);
+    addHelp(builder.helpGroup,
             builder.name,
-            builder.helpText,
             builder.shortName,
-            builder.defaultValue,
-            builder.implicitValue);
+            builder.description,
+            "\t\tDefault: '"
+                + builder.defaultValue
+                + "', Implicit: '"
+                + builder.implicitValue
+                + "'\n");
     return spec;
 }
 
@@ -32,28 +37,38 @@ IntArgument* CppliImpl::addIntArgument(const IntArgumentSpec& builder) {
     checkNameAvailability(builder.name, builder.shortName);
     auto spec = new IntArgumentImpl(builder.defaultValue,
                                     builder.implicitValue);
-    addSpec(spec,
+    addSpec(spec, builder.name, builder.shortName);
+    addHelp(builder.helpGroup,
             builder.name,
-            builder.helpText,
             builder.shortName,
-            to_string(builder.defaultValue),
-            to_string(builder.implicitValue));
+            builder.description,
+            "\t\tDefault: '"
+            + to_string(builder.defaultValue)
+            + "', Implicit: '"
+            + to_string(builder.implicitValue)
+            + "'\n");
     return spec;
 }
 
 Flag* CppliImpl::addFlag(const FlagSpec& builder) {
     checkNameAvailability(builder.name, builder.shortName);
     auto spec = new FlagImpl();
-    addSpec(spec, builder.name, builder.helpText, builder.shortName, "", "");
+    addSpec(spec, builder.name, builder.shortName);
+    addHelp(builder.helpGroup,
+            builder.name,
+            builder.shortName,
+            builder.description,
+            "\t\tFlag <default: false, implicit: true>"
+                "does not accept explicit values)");
     return spec;
 }
 
-vector<string> CppliImpl::interpret(const vector<string>& args) {
+CppliImpl::ArgList CppliImpl::interpret(const ArgList& args) {
     for (CommandLineSpec* spec : commandLineSpecs) {
         spec->setDefault();
     }
 
-    vector<string> positionalArguments;
+    ArgList positionalArguments;
     string lastShortName;
     bool onlyPositional = false;
     for (const string& arg: args) {
@@ -143,36 +158,51 @@ void CppliImpl::addHelpFlag() {
 
 void CppliImpl::checkHelpFlag() {
     if (helpFlag != nullptr && helpFlag->get()) {
-        cout << help << "\n";
+        cout << renderHelp() << "\n";
         exit(0);
     }
 }
 
-void CppliImpl::addSpec(CommandLineSpec* spec,
+void CppliImpl::addHelp(const string& helpGroup,
                         const string& name,
-                        const string& helpText,
                         const string& shortName,
-                        const string& defaultValue,
-                        const string& implicitValue) {
+                        const string& description,
+                        const string& extra) {
     string helpLine = "\n\t--" + name;
     if (!shortName.empty()) {
         helpLine += ",-" + shortName;
     }
-    helpLine += "\t" + helpText;
-    if (!defaultValue.empty() || !implicitValue.empty()) {
-        helpLine += "\n\t\t";
-        if (!defaultValue.empty()) {
-            helpLine += "Default: " + defaultValue;
-            if (!implicitValue.empty()) {
-                helpLine += ", ";
-            }
-        }
-        if (!implicitValue.empty()) {
-            helpLine += "Implicit: " + implicitValue;
+    helpLine += "\t" + description + "\n";
+    helpLine += extra;
+
+    if (helpGroup.empty()) {
+        helpPrefix += helpLine;
+    }
+
+    bool foundHelpGroup = false;
+    for (HelpGroup& group : helpSections) {
+        if (group.groupName == helpGroup) {
+            foundHelpGroup = true;
+            group.content += helpLine;
+            break;
         }
     }
-    helpLine += "\n";
-    help += helpLine;
+    if (!foundHelpGroup) {
+        helpSections.push_back({helpGroup, helpGroup + "\n"});
+    }
+}
+
+string CppliImpl::renderHelp() const {
+    string help = helpPrefix + "\n";
+    for (const HelpGroup& group : helpSections) {
+        help += "\n" + group.content;
+    }
+    return help;
+}
+
+void CppliImpl::addSpec(CommandLineSpec* spec,
+                        const string& name,
+                        const string& shortName) {
     commandLineSpecs.push_back(spec);
     reservedNames.insert(name);
     specsByCommandLineString[name] = spec;
@@ -186,14 +216,14 @@ void CppliImpl::checkNameAvailability(const string& name,
                                       const string& shortName) const {
     if (reservedNames.count(name) != 0) {
         throw runtime_error(
-                "Argument tried to register " + name + " as a command-line name, "
-                "but a different argument already has it as a name.");
+            "Argument tried to register " + name + " as a command-line name, "
+            "but a different argument already has it as a name.");
     }
     if (!shortName.empty() && reservedNames.count(shortName) != 0) {
         throw runtime_error(
-                "Argument tried to register " + shortName + " as a command-line "
-                "short name, but a different argument already has it as a short "
-                "name.");
+            "Argument tried to register " + shortName + " as a command-line "
+            "short name, but a different argument already has it as a short "
+            "name.");
     }
     if (shortName.size() > 1) {
         throw runtime_error("Argument short name should always have length 1.");
