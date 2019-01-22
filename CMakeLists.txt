@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.7)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 11)
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build)
 
@@ -27,7 +27,7 @@ if (kktest)
         ${CMAKE_CURRENT_SOURCE_DIR}/test/cppli_test.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/test/help_test.cpp
     )
-    target_link_libraries(cppli_test PRIVATE cppli kktest)
+    target_link_libraries(cppli_test PRIVATE kktest)
     target_include_directories(cppli_test PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 else()
     message(WARNING "Cannot build test: kktest library not installed.")
