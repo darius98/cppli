@@ -29,7 +29,7 @@ Argument* CppliImpl::addArgument(const ArgumentSpec& builder) {
                 + builder.defaultValue
                 + "', Implicit: '"
                 + builder.implicitValue
-                + "'\n");
+                + "'");
     return spec;
 }
 
@@ -42,11 +42,10 @@ IntArgument* CppliImpl::addIntArgument(const IntArgumentSpec& builder) {
             builder.name,
             builder.shortName,
             builder.description,
-            "\t\tDefault: '"
+            "\t\tInt; Default: "
             + to_string(builder.defaultValue)
-            + "', Implicit: '"
-            + to_string(builder.implicitValue)
-            + "'\n");
+            + ", Implicit: "
+            + to_string(builder.implicitValue));
     return spec;
 }
 
@@ -58,8 +57,8 @@ Flag* CppliImpl::addFlag(const FlagSpec& builder) {
             builder.name,
             builder.shortName,
             builder.description,
-            "\t\tFlag <default: false, implicit: true>"
-                "does not accept explicit values)");
+            "\t\tFlag; Default: false, Implicit: true, "
+            "Explicit values: not supported");
     return spec;
 }
 
@@ -168,7 +167,7 @@ void CppliImpl::addHelp(const string& helpGroup,
                         const string& shortName,
                         const string& description,
                         const string& extra) {
-    string helpLine = "\n\t--" + name;
+    string helpLine = "\t--" + name;
     if (!shortName.empty()) {
         helpLine += ",-" + shortName;
     }
@@ -176,19 +175,20 @@ void CppliImpl::addHelp(const string& helpGroup,
     helpLine += extra;
 
     if (helpGroup.empty()) {
-        helpPrefix += helpLine;
+        helpPrefix += "\n" + helpLine;
+        return;
     }
 
     bool foundHelpGroup = false;
     for (HelpGroup& group : helpSections) {
         if (group.groupName == helpGroup) {
             foundHelpGroup = true;
-            group.content += helpLine;
+            group.content += helpLine + "\n";
             break;
         }
     }
     if (!foundHelpGroup) {
-        helpSections.push_back({helpGroup, helpGroup + "\n"});
+        helpSections.push_back({helpGroup, helpGroup + "\n" + helpLine + "\n"});
     }
 }
 

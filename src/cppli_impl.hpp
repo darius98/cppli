@@ -33,14 +33,15 @@ class CppliImpl: public Cppli {
 
     void checkHelpFlag() override;
 
+    // @visibleForTesting
+    std::string renderHelp() const;
  private:
+
     void addHelp(const std::string& helpGroup,
                  const std::string& name,
                  const std::string& shortName,
                  const std::string& description,
                  const std::string& extra);
-
-    std::string renderHelp() const;
 
     void addSpec(CommandLineSpec* spec,
                  const std::string& name,

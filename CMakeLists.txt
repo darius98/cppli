@@ -6,24 +6,29 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build)
 set(CMAKE_INSTALL_PREFIX /usr/local/)
 
 add_library(cppli_objects OBJECT
-    src/argument.cpp
-    src/argument_impl.cpp
-    src/cppli_impl.cpp
-    src/cppli_interface.cpp
-    src/flag.cpp
-    src/int_argument.cpp)
-target_include_directories(cppli_objects PUBLIC include)
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/argument.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/argument_impl.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cppli_impl.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cppli_interface.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/flag.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/int_argument.cpp
+)
+target_include_directories(cppli_objects PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 add_library(cppli $<TARGET_OBJECTS:cppli_objects>)
 target_link_libraries(cppli PUBLIC cppli_objects)
 install(TARGETS cppli ARCHIVE DESTINATION lib)
-install(DIRECTORY include DESTINATION .)
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include DESTINATION .)
 
 find_library(kktest kktest /usr/local/lib/)
 
 if (kktest)
-    add_executable(cppli_test EXCLUDE_FROM_ALL test/cppli_test.cpp)
-    target_link_libraries(cppli_test PUBLIC cppli kktest)
+    add_executable(cppli_test EXCLUDE_FROM_ALL
+        ${CMAKE_CURRENT_SOURCE_DIR}/test/cppli_test.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/test/help_test.cpp
+    )
+    target_link_libraries(cppli_test PRIVATE cppli kktest)
+    target_include_directories(cppli_test PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 else()
-    message("Cannot build test: kktest library not installed.")
+    message(WARNING "Cannot build test: kktest library not installed.")
 endif()
