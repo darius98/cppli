@@ -11,20 +11,15 @@ using namespace kktest::core_matchers;
 using namespace std;
 
 void kkTestCase(CppliHelp) {
-    Cppli* cppli = nullptr;
+    Cppli cppli("");
 
     setUp([&] {
-        cppli = new Cppli("Test help prefix.");
-        cppli->addHelpFlag();
-    });
-
-    tearDown([&] {
-        delete cppli;
-        cppli = nullptr;
+        cppli = Cppli("Test help prefix.");
+        cppli.addHelpFlag();
     });
 
     test("Only with the help flag", [&] {
-        expect(cppli->renderHelp(), isEqualTo(
+        expect(cppli.renderHelp(), isEqualTo(
             "Test help prefix.\n"
             "\n"
             "\t--help,-h\tDisplay this help menu.\n"
@@ -33,10 +28,10 @@ void kkTestCase(CppliHelp) {
     });
 
     test("After adding another flag without help group", [&] {
-        cppli->addFlag(FlagSpec("version")
-                       .setDescription("Display program version")
-                       .setShortName("v"));
-        expect(cppli->renderHelp(), isEqualTo(
+        cppli.addFlag(FlagSpec("version")
+                      .setDescription("Display program version")
+                      .setShortName("v"));
+        expect(cppli.renderHelp(), isEqualTo(
             "Test help prefix.\n"
             "\n"
             "\t--help,-h\tDisplay this help menu.\n"
@@ -47,11 +42,11 @@ void kkTestCase(CppliHelp) {
     });
 
     test("After adding an argument with default and implicit values", [&] {
-        cppli->addArgument(ArgumentSpec("config")
-                           .setDescription("File to take config from")
-                           .setDefaultValue("/path/to/default-config.txt")
-                           .setImplicitValue("./config.txt"));
-        expect(cppli->renderHelp(), isEqualTo(
+        cppli.addArgument(ArgumentSpec("config")
+                          .setDescription("File to take config from")
+                          .setDefaultValue("/path/to/default-config.txt")
+                          .setImplicitValue("./config.txt"));
+        expect(cppli.renderHelp(), isEqualTo(
             "Test help prefix.\n"
             "\n"
             "\t--help,-h\tDisplay this help menu.\n"
@@ -62,12 +57,12 @@ void kkTestCase(CppliHelp) {
     });
 
     test("After adding argument within a group", [&] {
-        cppli->addArgument(ArgumentSpec("config")
-                           .setDescription("File to take config from")
-                           .setHelpGroup("Config")
-                           .setDefaultValue("/path/to/default-config.txt")
-                           .setImplicitValue("./config.txt"));
-        expect(cppli->renderHelp(), isEqualTo(
+        cppli.addArgument(ArgumentSpec("config")
+                          .setDescription("File to take config from")
+                          .setHelpGroup("Config")
+                          .setDefaultValue("/path/to/default-config.txt")
+                          .setImplicitValue("./config.txt"));
+        expect(cppli.renderHelp(), isEqualTo(
             "Test help prefix.\n"
             "\n"
             "\t--help,-h\tDisplay this help menu.\n"
@@ -80,18 +75,18 @@ void kkTestCase(CppliHelp) {
     });
 
     test("Arguments in a group are in the same order as they were added.", [&] {
-        cppli->addArgument(ArgumentSpec("config")
-                           .setDescription("File to take config from")
-                           .setHelpGroup("Config")
-                           .setDefaultValue("/path/to/default-config.txt")
-                           .setImplicitValue("./config.txt"));
-        cppli->addArgument(ArgumentSpec("json-config")
-                           .setDescription("File to take JSON config from")
-                           .setHelpGroup("Config")
-                           .setDefaultValue("/path/to/default-config.json")
-                           .setImplicitValue("./config.json"));
+        cppli.addArgument(ArgumentSpec("config")
+                          .setDescription("File to take config from")
+                          .setHelpGroup("Config")
+                          .setDefaultValue("/path/to/default-config.txt")
+                          .setImplicitValue("./config.txt"));
+        cppli.addArgument(ArgumentSpec("json-config")
+                          .setDescription("File to take JSON config from")
+                          .setHelpGroup("Config")
+                          .setDefaultValue("/path/to/default-config.json")
+                          .setImplicitValue("./config.json"));
 
-        expect(cppli->renderHelp(), isEqualTo(
+        expect(cppli.renderHelp(), isEqualTo(
             "Test help prefix.\n"
             "\n"
             "\t--help,-h\tDisplay this help menu.\n"
@@ -106,37 +101,37 @@ void kkTestCase(CppliHelp) {
     });
 
     test("Groups are in the same order as their first arguments added", [&] {
-        cppli->addArgument(ArgumentSpec("config")
-                           .setDescription("File to take config from")
-                           .setHelpGroup("Config")
-                           .setDefaultValue("/path/to/default-config.txt")
-                           .setImplicitValue("./config.txt"));
+        cppli.addArgument(ArgumentSpec("config")
+                          .setDescription("File to take config from")
+                          .setHelpGroup("Config")
+                          .setDefaultValue("/path/to/default-config.txt")
+                          .setImplicitValue("./config.txt"));
 
-        cppli->addFlag(FlagSpec("version")
-                       .setDescription("Display program version")
-                       .setShortName("v"));
+        cppli.addFlag(FlagSpec("version")
+                      .setDescription("Display program version")
+                      .setShortName("v"));
 
-        cppli->addArgument(ArgumentSpec("interpreter")
-                           .setDescription("Interpreter to use")
-                           .setHelpGroup("Runtime")
-                           .setShortName("I")
-                           .setDefaultValue("python3")
-                           .setImplicitValue("python3"));
+        cppli.addArgument(ArgumentSpec("interpreter")
+                          .setDescription("Interpreter to use")
+                          .setHelpGroup("Runtime")
+                          .setShortName("I")
+                          .setDefaultValue("python3")
+                          .setImplicitValue("python3"));
 
-        cppli->addIntArgument(IntArgumentSpec("vm-heap")
-                              .setDescription("Interpreter VM max heap size")
-                              .setHelpGroup("Runtime")
-                              .setDefaultValue(1000)
-                              .setImplicitValue(1000));
+        cppli.addNumericArgument(NumericArgumentSpec<int>("vm-heap")
+                                 .setDescription("Interpreter VM max heap size")
+                                 .setHelpGroup("Runtime")
+                                 .setDefaultValue(1000)
+                                 .setImplicitValue(1000));
 
-        cppli->addArgument(ArgumentSpec("json-config")
-                           .setDescription("File to take JSON config from")
-                           .setHelpGroup("Config")
-                           .setDefaultValue("/path/to/default-config.json")
-                           .setImplicitValue("./config.json"));
+        cppli.addArgument(ArgumentSpec("json-config")
+                          .setDescription("File to take JSON config from")
+                          .setHelpGroup("Config")
+                          .setDefaultValue("/path/to/default-config.json")
+                          .setImplicitValue("./config.json"));
 
 
-        expect(cppli->renderHelp(), isEqualTo(
+        expect(cppli.renderHelp(), isEqualTo(
             "Test help prefix.\n"
             "\n"
             "\t--help,-h\tDisplay this help menu.\n"

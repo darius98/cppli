@@ -21,10 +21,10 @@ class Cppli {
 
     ~Cppli();
 
-    Argument* addArgument(const ArgumentSpec& builder);
+    ArgumentAccessor addArgument(const ArgumentSpec& builder);
 
     template<class T>
-    NumericArgument<T>* addNumericArgument(
+    NumericArgumentAccessor<T> addNumericArgument(
             const NumericArgumentSpec<T>& builder) {
         checkNameAvailability(builder.name, builder.shortName);
         auto spec = new NumericArgument<T>(builder.defaultValue,
@@ -38,10 +38,10 @@ class Cppli {
                 + std::to_string(builder.defaultValue)
                 + ", Implicit: "
                 + std::to_string(builder.implicitValue));
-        return spec;
+        return NumericArgumentAccessor<T>(spec);
     }
 
-    Flag* addFlag(const FlagSpec& builder);
+    FlagAccessor addFlag(const FlagSpec& builder);
 
     ArgList interpret(const ArgList& argv);
 
@@ -80,7 +80,7 @@ class Cppli {
 
     void applyImplicit(const std::string& commandLineString);
 
-    Flag* helpFlag = nullptr;
+    FlagAccessor helpFlag;
 
     std::vector<CommandLineSpec*> commandLineSpecs;
     std::map<std::string, CommandLineSpec*> specsByCommandLineString;

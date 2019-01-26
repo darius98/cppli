@@ -14,7 +14,7 @@ Cppli::~Cppli() {
     }
 }
 
-Argument* Cppli::addArgument(const ArgumentSpec& builder) {
+ArgumentAccessor Cppli::addArgument(const ArgumentSpec& builder) {
     checkNameAvailability(builder.name, builder.shortName);
     auto spec = new Argument(builder.defaultValue, builder.implicitValue);
     addSpec(spec, builder.name, builder.shortName);
@@ -27,10 +27,10 @@ Argument* Cppli::addArgument(const ArgumentSpec& builder) {
             + "', Implicit: '"
             + builder.implicitValue
             + "'");
-    return spec;
+    return ArgumentAccessor(spec);
 }
 
-Flag* Cppli::addFlag(const FlagSpec& builder) {
+FlagAccessor Cppli::addFlag(const FlagSpec& builder) {
     checkNameAvailability(builder.name, builder.shortName);
     auto spec = new Flag();
     addSpec(spec, builder.name, builder.shortName);
@@ -40,7 +40,7 @@ Flag* Cppli::addFlag(const FlagSpec& builder) {
             builder.description,
             "\t\tFlag; Default: false, Implicit: true, "
             "Explicit values: not supported");
-    return spec;
+    return FlagAccessor(spec);
 }
 
 Cppli::ArgList Cppli::interpret(const ArgList& args) {
@@ -139,13 +139,16 @@ Cppli::ArgList Cppli::interpret(int argc, char** argv) {
 }
 
 void Cppli::addHelpFlag() {
+    if (helpFlag.resource != nullptr) {
+        throw invalid_argument("Trying to add help flag twice!");
+    }
     helpFlag = addFlag(FlagSpec("help")
                        .setDescription("Display this help menu.")
                        .setShortName("h"));
 }
 
 void Cppli::checkHelpFlag() {
-    if (helpFlag != nullptr && helpFlag->get()) {
+    if (helpFlag.resource != nullptr && helpFlag.get()) {
         cout << renderHelp() << "\n";
         exit(0);
     }

@@ -4,6 +4,7 @@
 #include <string>
 #include <type_traits>
 
+#include <cppli_impl/accessor.hpp>
 #include <cppli_impl/command_line_spec.hpp>
 
 namespace cppli {
@@ -11,15 +12,14 @@ namespace cppli {
 template<class T, class=typename std::enable_if<std::is_arithmetic<T>::value>::type>
 class NumericArgument: public CommandLineSpec {
  public:
+    NumericArgument(T _defaultValue, T _implicitValue):
+            defaultValue(_defaultValue), implicitValue(_implicitValue) {}
+
     ~NumericArgument() override = default;
 
     T get() const {
         return value;
     }
-
- private:
-    NumericArgument(T _defaultValue, T _implicitValue):
-            defaultValue(_defaultValue), implicitValue(_implicitValue) {}
 
     void setDefault() override {
         value = defaultValue;
@@ -35,11 +35,10 @@ class NumericArgument: public CommandLineSpec {
 
     void setValue(const std::string& _value) override;
 
+ private:
     T value;
     T defaultValue;
     T implicitValue;
-
-friend class Cppli;
 };
 
 template<>
@@ -80,6 +79,9 @@ void NumericArgument<double>::setValue(const std::string& _value);
 
 template<>
 void NumericArgument<long double>::setValue(const std::string& _value);
+
+template<class T>
+using NumericArgumentAccessor = Accessor<NumericArgument<T>>;
 
 template<class T, class=typename std::enable_if<std::is_arithmetic<T>::value>::type>
 struct NumericArgumentSpec {

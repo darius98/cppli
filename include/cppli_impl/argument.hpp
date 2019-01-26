@@ -3,18 +3,18 @@
 
 #include <string>
 
+#include <cppli_impl/accessor.hpp>
 #include <cppli_impl/command_line_spec.hpp>
 
 namespace cppli {
 
 class Argument: public CommandLineSpec {
  public:
+    Argument(std::string _defaultValue, std::string _implicitValue);
+
     ~Argument() override;
 
     std::string get() const;
-
- private:
-    Argument(std::string _defaultValue, std::string _implicitValue);
 
     void setDefault() override;
 
@@ -24,12 +24,13 @@ class Argument: public CommandLineSpec {
 
     void setValue(const std::string& _value) override;
 
+ private:
     std::string value;
     std::string defaultValue;
     std::string implicitValue;
-
-friend class Cppli;
 };
+
+typedef Accessor<Argument> ArgumentAccessor;
 
 struct ArgumentSpec {
     explicit ArgumentSpec(std::string _name);

@@ -3,18 +3,18 @@
 
 #include <string>
 
+#include <cppli_impl/accessor.hpp>
 #include <cppli_impl/command_line_spec.hpp>
 
 namespace cppli {
 
 class Flag: public CommandLineSpec {
  public:
+    Flag();
+
     ~Flag() override;
 
     bool get() const;
-
- private:
-    Flag();
 
     void setDefault() override;
 
@@ -24,10 +24,11 @@ class Flag: public CommandLineSpec {
 
     void setValue(const std::string& _value) override;
 
+ private:
     bool value;
-
-friend class Cppli;
 };
+
+typedef Accessor<Flag> FlagAccessor;
 
 struct FlagSpec {
     explicit FlagSpec(std::string _name);
