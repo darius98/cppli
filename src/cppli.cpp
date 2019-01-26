@@ -45,6 +45,11 @@ Flag Cppli::addFlag(const FlagSpec& builder) {
     return Flag(spec);
 }
 
+void Cppli::addTerminalFlag(const FlagSpec& builder,
+                            const function<void()>& callback) {
+    terminalFlags.emplace_back(addFlag(builder), callback);
+}
+
 Cppli::ArgList Cppli::interpret(const ArgList& args) {
     for (CommandLineSpec* spec : commandLineSpecs) {
         spec->setDefault();
@@ -129,6 +134,14 @@ Cppli::ArgList Cppli::interpret(const ArgList& args) {
     if (!lastShortName.empty()) {
         applyImplicit(lastShortName);
     }
+
+    for (const pair<Flag, function<void()>>& flag: terminalFlags) {
+        if (flag.first.get()) {
+            flag.second();
+            exit(0);
+        }
+    }
+
     return positionalArguments;
 }
 
@@ -138,22 +151,6 @@ Cppli::ArgList Cppli::interpret(int argc, char** argv) {
         args.emplace_back(argv[i]);
     }
     return interpret(args);
-}
-
-void Cppli::addHelpFlag() {
-    if (helpFlag.isValid()) {
-        throw invalid_argument("Trying to add help flag twice!");
-    }
-    helpFlag = addFlag(FlagSpec("help")
-                       .setDescription("Display this help menu.")
-                       .setShortName("h"));
-}
-
-void Cppli::checkHelpFlag() {
-    if (helpFlag.isValid() && helpFlag.get()) {
-        cout << renderHelp() << "\n";
-        exit(0);
-    }
 }
 
 void Cppli::addHelp(const string& helpGroup,

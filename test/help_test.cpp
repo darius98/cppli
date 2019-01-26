@@ -1,3 +1,4 @@
+#include <iostream>
 #include <vector>
 
 #include <kktest.hpp>
@@ -15,7 +16,12 @@ void kkTestCase(CppliHelp) {
 
     setUp([&] {
         cppli = Cppli("Test help prefix.");
-        cppli.addHelpFlag();
+        cppli.addTerminalFlag(FlagSpec("help")
+                              .setShortName("h")
+                              .setDescription("Display this help menu."),
+                              [&]() {
+            cout << cppli.renderHelp();
+        });
     });
 
     test("Only with the help flag", [&] {

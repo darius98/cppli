@@ -1,6 +1,7 @@
 #ifndef CPPLI_IMPL_CPPLI_HPP_
 #define CPPLI_IMPL_CPPLI_HPP_
 
+#include <functional>
 #include <map>
 #include <set>
 #include <string>
@@ -44,15 +45,13 @@ class Cppli {
 
     Flag addFlag(const FlagSpec& builder);
 
+    void addTerminalFlag(const FlagSpec& builder,
+                         const std::function<void()>& callback);
+
     ArgList interpret(const ArgList& argv);
 
     ArgList interpret(int argc, char** argv);
 
-    void addHelpFlag();
-
-    void checkHelpFlag();
-
-    // Only public for testing.
     std::string renderHelp() const;
 
  private:
@@ -81,8 +80,6 @@ class Cppli {
 
     void applyImplicit(const std::string& commandLineString);
 
-    Flag helpFlag;
-
     std::vector<detail::CommandLineSpec*> commandLineSpecs;
     std::map<std::string, detail::CommandLineSpec*> specsByCommandLineString;
 
@@ -90,6 +87,8 @@ class Cppli {
     std::vector<HelpGroup> helpSections;
 
     std::set<std::string> reservedNames;
+
+    std::vector<std::pair<Flag, std::function<void()>>> terminalFlags;
 };
 
 }  // namespace cppli
