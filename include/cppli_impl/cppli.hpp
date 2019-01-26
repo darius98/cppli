@@ -23,7 +23,23 @@ class Cppli {
 
     Argument* addArgument(const ArgumentSpec& builder);
 
-    IntArgument* addIntArgument(const IntArgumentSpec& builder);
+    template<class T>
+    NumericArgument<T>* addNumericArgument(
+            const NumericArgumentSpec<T>& builder) {
+        checkNameAvailability(builder.name, builder.shortName);
+        auto spec = new NumericArgument<T>(builder.defaultValue,
+                                           builder.implicitValue);
+        addSpec(spec, builder.name, builder.shortName);
+        addHelp(builder.helpGroup,
+                builder.name,
+                builder.shortName,
+                builder.description,
+                "\t\tNumeric; Default: "
+                + std::to_string(builder.defaultValue)
+                + ", Implicit: "
+                + std::to_string(builder.implicitValue));
+        return spec;
+    }
 
     Flag* addFlag(const FlagSpec& builder);
 

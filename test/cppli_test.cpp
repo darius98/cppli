@@ -196,13 +196,13 @@ void kkTestCase(Cppli) {
     });
 
     group("integer arguments", [&] {
-        IntArgument* arg = nullptr;
+        NumericArgument<int>* arg = nullptr;
 
         setUp([&] {
-            arg = cppli->addIntArgument(IntArgumentSpec("name")
-                                        .setShortName("n")
-                                        .setDefaultValue(0)
-                                        .setImplicitValue(1));
+            arg = cppli->addNumericArgument(NumericArgumentSpec<int>("name")
+                                            .setShortName("n")
+                                            .setDefaultValue(0)
+                                            .setImplicitValue(1));
         });
 
         test("Passing an integer argument an integer value works", [&] {

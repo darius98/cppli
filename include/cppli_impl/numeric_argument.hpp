@@ -42,8 +42,7 @@ class NumericArgument: public CommandLineSpec {
 friend class Cppli;
 };
 
-template<>
-void NumericArgument<int>::setValue(const std::string& _value);
+template<> void NumericArgument<int>::setValue(const std::string& _value);
 
 template<class T, class=typename std::enable_if<std::is_arithmetic<T>::value>::type>
 struct NumericArgumentSpec {
@@ -81,9 +80,6 @@ struct NumericArgumentSpec {
     T defaultValue = 0;
     T implicitValue = 0;
 };
-
-typedef NumericArgument<int> IntArgument;
-typedef NumericArgumentSpec<int> IntArgumentSpec;
 
 }
 

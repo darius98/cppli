@@ -30,21 +30,6 @@ Argument* Cppli::addArgument(const ArgumentSpec& builder) {
     return spec;
 }
 
-IntArgument* Cppli::addIntArgument(const IntArgumentSpec& builder) {
-    checkNameAvailability(builder.name, builder.shortName);
-    auto spec = new IntArgument(builder.defaultValue, builder.implicitValue);
-    addSpec(spec, builder.name, builder.shortName);
-    addHelp(builder.helpGroup,
-            builder.name,
-            builder.shortName,
-            builder.description,
-            "\t\tInt; Default: "
-            + to_string(builder.defaultValue)
-            + ", Implicit: "
-            + to_string(builder.implicitValue));
-    return spec;
-}
-
 Flag* Cppli::addFlag(const FlagSpec& builder) {
     checkNameAvailability(builder.name, builder.shortName);
     auto spec = new Flag();
