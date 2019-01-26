@@ -61,6 +61,5 @@ void ArgumentDetails::setValue(const string& _value) {
     value = _value;
 }
 
-}
-
-}
+}  // namespace detail
+}  // namespace cppli

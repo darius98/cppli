@@ -4,6 +4,7 @@
 #include <string>
 
 namespace cppli {
+namespace detail {
 
 class CommandLineSpec {
  public:
@@ -18,6 +19,7 @@ class CommandLineSpec {
     virtual void setValue(const std::string& _value) = 0;
 };
 
-}
+}  // namespace detail
+}  // namespace cppli
 
 #endif

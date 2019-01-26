@@ -8,11 +8,10 @@
 
 namespace cppli {
 
-namespace detail {
-class FlagDetails;
-}
+// Forward declaration so I can declare the accessor.
+namespace detail { class FlagDetails; }
 
-typedef Accessor<detail::FlagDetails> Flag;
+typedef detail::Accessor<detail::FlagDetails> Flag;
 
 struct FlagSpec {
     explicit FlagSpec(std::string _name);
@@ -28,6 +27,7 @@ struct FlagSpec {
 };
 
 namespace detail {
+
 class FlagDetails: public CommandLineSpec {
  public:
     FlagDetails();
@@ -47,8 +47,8 @@ class FlagDetails: public CommandLineSpec {
  private:
     bool value;
 };
-}
 
-}
+}  // namespace detail
+}  // namespace cppli
 
 #endif

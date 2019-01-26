@@ -67,7 +67,7 @@ class Cppli {
                  const std::string& description,
                  const std::string& extra);
 
-    void addSpec(CommandLineSpec* spec,
+    void addSpec(detail::CommandLineSpec* spec,
                  const std::string& name,
                  const std::string& shortName);
 
@@ -83,8 +83,8 @@ class Cppli {
 
     Flag helpFlag;
 
-    std::vector<CommandLineSpec*> commandLineSpecs;
-    std::map<std::string, CommandLineSpec*> specsByCommandLineString;
+    std::vector<detail::CommandLineSpec*> commandLineSpecs;
+    std::map<std::string, detail::CommandLineSpec*> specsByCommandLineString;
 
     std::string helpPrefix;
     std::vector<HelpGroup> helpSections;
@@ -92,6 +92,6 @@ class Cppli {
     std::set<std::string> reservedNames;
 };
 
-}
+}  // namespace cppli
 
 #endif

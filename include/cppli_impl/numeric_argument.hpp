@@ -9,13 +9,14 @@
 
 namespace cppli {
 
+// Forward declaration so I can declare the accessor.
 namespace detail {
 template<class T, class=typename std::enable_if<std::is_arithmetic<T>::value>::type>
 class NumericArgumentDetails;
 }
 
 template<class T>
-using NumericArgument = Accessor<detail::NumericArgumentDetails<T>>;
+using NumericArgument = detail::Accessor<detail::NumericArgumentDetails<T>>;
 
 template<class T, class=typename std::enable_if<std::is_arithmetic<T>::value>::type>
 struct NumericArgumentSpec {
@@ -55,6 +56,7 @@ struct NumericArgumentSpec {
 };
 
 namespace detail {
+
 template<class T, class>
 class NumericArgumentDetails: public CommandLineSpec {
  public:
@@ -125,8 +127,8 @@ void NumericArgumentDetails<double>::setValue(const std::string& _value);
 
 template<>
 void NumericArgumentDetails<long double>::setValue(const std::string& _value);
-}
 
-}
+}  // namespace detail
+}  // namespace cppli
 
 #endif

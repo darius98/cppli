@@ -8,11 +8,10 @@
 
 namespace cppli {
 
-namespace detail {
-class ArgumentDetails;
-}
+// Forward declaration so I can declare the accessor.
+namespace detail { class ArgumentDetails; }
 
-typedef Accessor<detail::ArgumentDetails> Argument;
+typedef detail::Accessor<detail::ArgumentDetails> Argument;
 
 struct ArgumentSpec {
     explicit ArgumentSpec(std::string _name);
@@ -32,6 +31,7 @@ struct ArgumentSpec {
 };
 
 namespace detail {
+
 class ArgumentDetails: public CommandLineSpec {
  public:
     ArgumentDetails(std::string _defaultValue, std::string _implicitValue);
@@ -53,8 +53,8 @@ class ArgumentDetails: public CommandLineSpec {
     std::string defaultValue;
     std::string implicitValue;
 };
-}
 
-}
+}  // namespace detail
+}  // namespace cppli
 
 #endif

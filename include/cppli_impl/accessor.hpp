@@ -4,11 +4,12 @@
 #include <stdexcept>
 
 namespace cppli {
+namespace detail {
 
 template<class T>
 class Accessor {
  public:
-    Accessor(): resource(nullptr) {}
+    explicit Accessor(const T* _resource = nullptr): resource(_resource) {}
 
     Accessor(const Accessor& other): resource(other.resource) {}
 
@@ -38,13 +39,10 @@ class Accessor {
     }
 
  private:
-    explicit Accessor(const T* _resource): resource(_resource) {}
-
     const T* resource = nullptr;
-
-friend class Cppli;
 };
 
-}
+}  // namespace detail
+}  // namespace cppli
 
 #endif

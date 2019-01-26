@@ -70,5 +70,5 @@ void NumericArgumentDetails<long double>::setValue(const std::string& _value) {
     value = stold(_value);
 }
 
-}
-}
+}  // namespace detail
+}  // namespace cppli

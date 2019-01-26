@@ -141,7 +141,7 @@ Cppli::ArgList Cppli::interpret(int argc, char** argv) {
 }
 
 void Cppli::addHelpFlag() {
-    if (helpFlag.resource != nullptr) {
+    if (helpFlag.isValid()) {
         throw invalid_argument("Trying to add help flag twice!");
     }
     helpFlag = addFlag(FlagSpec("help")
@@ -150,7 +150,7 @@ void Cppli::addHelpFlag() {
 }
 
 void Cppli::checkHelpFlag() {
-    if (helpFlag.resource != nullptr && helpFlag.get()) {
+    if (helpFlag.isValid() && helpFlag.get()) {
         cout << renderHelp() << "\n";
         exit(0);
     }
@@ -245,4 +245,4 @@ void Cppli::applyImplicit(const string& commandLineString) {
     }
 }
 
-}
+}  // namespace cppli

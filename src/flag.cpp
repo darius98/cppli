@@ -49,6 +49,5 @@ void FlagDetails::setValue(const string& _value) {
     throw invalid_argument("Tried to give value `" + _value + "` to a flag!");
 }
 
-}
-
-}
+}  // namespace detail
+}  // namespace cppli
