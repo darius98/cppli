@@ -42,7 +42,44 @@ class NumericArgument: public CommandLineSpec {
 friend class Cppli;
 };
 
-template<> void NumericArgument<int>::setValue(const std::string& _value);
+template<>
+void NumericArgument<char>::setValue(const std::string& _value);
+
+template<>
+void NumericArgument<unsigned char>::setValue(const std::string& _value);
+
+template<>
+void NumericArgument<short int>::setValue(const std::string& _value);
+
+template<>
+void NumericArgument<unsigned short int>::setValue(const std::string& _value);
+
+template<>
+void NumericArgument<int>::setValue(const std::string& _value);
+
+template<>
+void NumericArgument<unsigned int>::setValue(const std::string& _value);
+
+template<>
+void NumericArgument<long>::setValue(const std::string& _value);
+
+template<>
+void NumericArgument<unsigned long>::setValue(const std::string& _value);
+
+template<>
+void NumericArgument<long long>::setValue(const std::string& _value);
+
+template<>
+void NumericArgument<unsigned long long>::setValue(const std::string& _value);
+
+template<>
+void NumericArgument<float>::setValue(const std::string& _value);
+
+template<>
+void NumericArgument<double>::setValue(const std::string& _value);
+
+template<>
+void NumericArgument<long double>::setValue(const std::string& _value);
 
 template<class T, class=typename std::enable_if<std::is_arithmetic<T>::value>::type>
 struct NumericArgumentSpec {
