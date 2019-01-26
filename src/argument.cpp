@@ -6,32 +6,6 @@ using namespace std;
 
 namespace cppli {
 
-Argument::Argument(string _defaultValue, string _implicitValue):
-        defaultValue(move(_defaultValue)),
-        implicitValue(move(_implicitValue)) {}
-
-Argument::~Argument() = default;
-
-string Argument::get() const {
-    return value;
-}
-
-void Argument::setDefault() {
-    value = defaultValue;
-}
-
-void Argument::setImplicit() {
-    value = implicitValue;
-}
-
-bool Argument::supportsValue() const {
-    return true;
-}
-
-void Argument::setValue(const string& _value) {
-    value = _value;
-}
-
 ArgumentSpec::ArgumentSpec(string _name): name(move(_name)) {}
 
 ArgumentSpec& ArgumentSpec::setDescription(const string& _description) {
@@ -57,6 +31,36 @@ ArgumentSpec& ArgumentSpec::setDefaultValue(const string& _defaultValue) {
 ArgumentSpec& ArgumentSpec::setImplicitValue(const string& _implicitValue) {
     implicitValue = _implicitValue;
     return *this;
+}
+
+namespace detail {
+
+ArgumentDetails::ArgumentDetails(string _defaultValue, string _implicitValue):
+        defaultValue(move(_defaultValue)),
+        implicitValue(move(_implicitValue)) {}
+
+ArgumentDetails::~ArgumentDetails() = default;
+
+string ArgumentDetails::get() const {
+    return value;
+}
+
+void ArgumentDetails::setDefault() {
+    value = defaultValue;
+}
+
+void ArgumentDetails::setImplicit() {
+    value = implicitValue;
+}
+
+bool ArgumentDetails::supportsValue() const {
+    return true;
+}
+
+void ArgumentDetails::setValue(const string& _value) {
+    value = _value;
+}
+
 }
 
 }

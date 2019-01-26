@@ -6,6 +6,8 @@ using namespace std;
 
 namespace cppli {
 
+using namespace detail;
+
 Cppli::Cppli(const string& _helpPrefix): helpPrefix(_helpPrefix + "\n") {}
 
 Cppli::~Cppli() {
@@ -14,9 +16,9 @@ Cppli::~Cppli() {
     }
 }
 
-ArgumentAccessor Cppli::addArgument(const ArgumentSpec& builder) {
+Argument Cppli::addArgument(const ArgumentSpec& builder) {
     checkNameAvailability(builder.name, builder.shortName);
-    auto spec = new Argument(builder.defaultValue, builder.implicitValue);
+    auto spec = new ArgumentDetails(builder.defaultValue, builder.implicitValue);
     addSpec(spec, builder.name, builder.shortName);
     addHelp(builder.helpGroup,
             builder.name,
@@ -27,12 +29,12 @@ ArgumentAccessor Cppli::addArgument(const ArgumentSpec& builder) {
             + "', Implicit: '"
             + builder.implicitValue
             + "'");
-    return ArgumentAccessor(spec);
+    return Argument(spec);
 }
 
-FlagAccessor Cppli::addFlag(const FlagSpec& builder) {
+Flag Cppli::addFlag(const FlagSpec& builder) {
     checkNameAvailability(builder.name, builder.shortName);
-    auto spec = new Flag();
+    auto spec = new FlagDetails();
     addSpec(spec, builder.name, builder.shortName);
     addHelp(builder.helpGroup,
             builder.name,
@@ -40,7 +42,7 @@ FlagAccessor Cppli::addFlag(const FlagSpec& builder) {
             builder.description,
             "\t\tFlag; Default: false, Implicit: true, "
             "Explicit values: not supported");
-    return FlagAccessor(spec);
+    return Flag(spec);
 }
 
 Cppli::ArgList Cppli::interpret(const ArgList& args) {

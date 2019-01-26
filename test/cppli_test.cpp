@@ -18,13 +18,13 @@ void kkTestCase(Cppli) {
     });
 
     group("Single string argument", [&] {
-        ArgumentAccessor arg;
+        Argument arg;
 
         setUp([&] {
             arg = cppli.addArgument(ArgumentSpec("name")
-                                     .setShortName("n")
-                                     .setDefaultValue("a")
-                                     .setImplicitValue("b"));
+                                    .setShortName("n")
+                                    .setDefaultValue("a")
+                                    .setImplicitValue("b"));
         });
 
         test("no value provided leads to argument taking default value", [&] {
@@ -88,23 +88,23 @@ void kkTestCase(Cppli) {
     });
 
     group("Multiple arguments", [&] {
-        ArgumentAccessor a;
-        ArgumentAccessor b;
-        ArgumentAccessor c;
+        Argument a;
+        Argument b;
+        Argument c;
 
         setUp([&] {
             a = cppli.addArgument(ArgumentSpec("arg_a")
-                                   .setShortName("a")
-                                   .setDefaultValue("default")
-                                   .setImplicitValue("implicit"));
+                                  .setShortName("a")
+                                  .setDefaultValue("default")
+                                  .setImplicitValue("implicit"));
             b = cppli.addArgument(ArgumentSpec("arg_b")
-                                   .setShortName("b")
-                                   .setDefaultValue("default")
-                                   .setImplicitValue("implicit"));
+                                  .setShortName("b")
+                                  .setDefaultValue("default")
+                                  .setImplicitValue("implicit"));
             c = cppli.addArgument(ArgumentSpec("arg_c")
-                                   .setShortName("c")
-                                   .setDefaultValue("default")
-                                   .setImplicitValue("implicit"));
+                                  .setShortName("c")
+                                  .setDefaultValue("default")
+                                  .setImplicitValue("implicit"));
         });
 
         test("Providing values for multiple arguments via double dash", [&] {
@@ -149,8 +149,8 @@ void kkTestCase(Cppli) {
     });
 
     group("flags", [&] {
-        FlagAccessor a;
-        FlagAccessor b;
+        Flag a;
+        Flag b;
 
         setUp([&] {
             a = cppli.addFlag(FlagSpec("flag_a").setShortName("a"));
@@ -191,13 +191,13 @@ void kkTestCase(Cppli) {
     });
 
     group("integer arguments", [&] {
-        NumericArgumentAccessor<int> arg;
+        NumericArgument<int> arg;
 
         setUp([&] {
             arg = cppli.addNumericArgument(NumericArgumentSpec<int>("name")
-                                            .setShortName("n")
-                                            .setDefaultValue(0)
-                                            .setImplicitValue(1));
+                                           .setShortName("n")
+                                           .setDefaultValue(0)
+                                           .setImplicitValue(1));
         });
 
         test("Passing an integer argument an integer value works", [&] {

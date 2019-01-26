@@ -8,29 +8,11 @@
 
 namespace cppli {
 
-class Argument: public CommandLineSpec {
- public:
-    Argument(std::string _defaultValue, std::string _implicitValue);
+namespace detail {
+class ArgumentDetails;
+}
 
-    ~Argument() override;
-
-    std::string get() const;
-
-    void setDefault() override;
-
-    void setImplicit() override;
-
-    bool supportsValue() const override;
-
-    void setValue(const std::string& _value) override;
-
- private:
-    std::string value;
-    std::string defaultValue;
-    std::string implicitValue;
-};
-
-typedef Accessor<Argument> ArgumentAccessor;
+typedef Accessor<detail::ArgumentDetails> Argument;
 
 struct ArgumentSpec {
     explicit ArgumentSpec(std::string _name);
@@ -48,6 +30,30 @@ struct ArgumentSpec {
     std::string defaultValue = "";
     std::string implicitValue = "";
 };
+
+namespace detail {
+class ArgumentDetails: public CommandLineSpec {
+ public:
+    ArgumentDetails(std::string _defaultValue, std::string _implicitValue);
+
+    ~ArgumentDetails() override;
+
+    std::string get() const;
+
+    void setDefault() override;
+
+    void setImplicit() override;
+
+    bool supportsValue() const override;
+
+    void setValue(const std::string& _value) override;
+
+ private:
+    std::string value;
+    std::string defaultValue;
+    std::string implicitValue;
+};
+}
 
 }
 

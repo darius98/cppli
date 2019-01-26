@@ -6,30 +6,6 @@ using namespace std;
 
 namespace cppli {
 
-Flag::Flag() = default;
-
-Flag::~Flag() = default;
-
-bool Flag::get() const {
-    return value;
-}
-
-void Flag::setDefault() {
-    value = false;
-}
-
-void Flag::setImplicit() {
-    value = true;
-}
-
-bool Flag::supportsValue() const {
-    return false;
-}
-
-void Flag::setValue(const string& _value) {
-    throw invalid_argument("Tried to give value `" + _value + "` to a flag!");
-}
-
 FlagSpec::FlagSpec(string _name): name(move(_name)) {}
 
 FlagSpec& FlagSpec::setDescription(const string& _description) {
@@ -45,6 +21,34 @@ FlagSpec& FlagSpec::setHelpGroup(const string& _helpGroup) {
 FlagSpec& FlagSpec::setShortName(const string& _shortName) {
     shortName = _shortName;
     return *this;
+}
+
+namespace detail {
+
+FlagDetails::FlagDetails() = default;
+
+FlagDetails::~FlagDetails() = default;
+
+bool FlagDetails::get() const {
+    return value;
+}
+
+void FlagDetails::setDefault() {
+    value = false;
+}
+
+void FlagDetails::setImplicit() {
+    value = true;
+}
+
+bool FlagDetails::supportsValue() const {
+    return false;
+}
+
+void FlagDetails::setValue(const string& _value) {
+    throw invalid_argument("Tried to give value `" + _value + "` to a flag!");
+}
+
 }
 
 }

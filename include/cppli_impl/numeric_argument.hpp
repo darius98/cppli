@@ -9,79 +9,13 @@
 
 namespace cppli {
 
+namespace detail {
 template<class T, class=typename std::enable_if<std::is_arithmetic<T>::value>::type>
-class NumericArgument: public CommandLineSpec {
- public:
-    NumericArgument(T _defaultValue, T _implicitValue):
-            defaultValue(_defaultValue), implicitValue(_implicitValue) {}
-
-    ~NumericArgument() override = default;
-
-    T get() const {
-        return value;
-    }
-
-    void setDefault() override {
-        value = defaultValue;
-    }
-
-    void setImplicit() override {
-        value = implicitValue;
-    }
-
-    bool supportsValue() const override {
-        return true;
-    }
-
-    void setValue(const std::string& _value) override;
-
- private:
-    T value;
-    T defaultValue;
-    T implicitValue;
-};
-
-template<>
-void NumericArgument<char>::setValue(const std::string& _value);
-
-template<>
-void NumericArgument<unsigned char>::setValue(const std::string& _value);
-
-template<>
-void NumericArgument<short int>::setValue(const std::string& _value);
-
-template<>
-void NumericArgument<unsigned short int>::setValue(const std::string& _value);
-
-template<>
-void NumericArgument<int>::setValue(const std::string& _value);
-
-template<>
-void NumericArgument<unsigned int>::setValue(const std::string& _value);
-
-template<>
-void NumericArgument<long>::setValue(const std::string& _value);
-
-template<>
-void NumericArgument<unsigned long>::setValue(const std::string& _value);
-
-template<>
-void NumericArgument<long long>::setValue(const std::string& _value);
-
-template<>
-void NumericArgument<unsigned long long>::setValue(const std::string& _value);
-
-template<>
-void NumericArgument<float>::setValue(const std::string& _value);
-
-template<>
-void NumericArgument<double>::setValue(const std::string& _value);
-
-template<>
-void NumericArgument<long double>::setValue(const std::string& _value);
+class NumericArgumentDetails;
+}
 
 template<class T>
-using NumericArgumentAccessor = Accessor<NumericArgument<T>>;
+using NumericArgument = Accessor<detail::NumericArgumentDetails<T>>;
 
 template<class T, class=typename std::enable_if<std::is_arithmetic<T>::value>::type>
 struct NumericArgumentSpec {
@@ -119,6 +53,79 @@ struct NumericArgumentSpec {
     T defaultValue = 0;
     T implicitValue = 0;
 };
+
+namespace detail {
+template<class T, class>
+class NumericArgumentDetails: public CommandLineSpec {
+ public:
+    NumericArgumentDetails(T _defaultValue, T _implicitValue):
+            defaultValue(_defaultValue), implicitValue(_implicitValue) {}
+
+    ~NumericArgumentDetails() override = default;
+
+    T get() const {
+        return value;
+    }
+
+    void setDefault() override {
+        value = defaultValue;
+    }
+
+    void setImplicit() override {
+        value = implicitValue;
+    }
+
+    bool supportsValue() const override {
+        return true;
+    }
+
+    void setValue(const std::string& _value) override;
+
+ private:
+    T value;
+    T defaultValue;
+    T implicitValue;
+};
+
+template<>
+void NumericArgumentDetails<char>::setValue(const std::string& _value);
+
+template<>
+void NumericArgumentDetails<unsigned char>::setValue(const std::string& _value);
+
+template<>
+void NumericArgumentDetails<short int>::setValue(const std::string& _value);
+
+template<>
+void NumericArgumentDetails<unsigned short int>::setValue(const std::string& _value);
+
+template<>
+void NumericArgumentDetails<int>::setValue(const std::string& _value);
+
+template<>
+void NumericArgumentDetails<unsigned int>::setValue(const std::string& _value);
+
+template<>
+void NumericArgumentDetails<long>::setValue(const std::string& _value);
+
+template<>
+void NumericArgumentDetails<unsigned long>::setValue(const std::string& _value);
+
+template<>
+void NumericArgumentDetails<long long>::setValue(const std::string& _value);
+
+template<>
+void NumericArgumentDetails<unsigned long long>::setValue(const std::string& _value);
+
+template<>
+void NumericArgumentDetails<float>::setValue(const std::string& _value);
+
+template<>
+void NumericArgumentDetails<double>::setValue(const std::string& _value);
+
+template<>
+void NumericArgumentDetails<long double>::setValue(const std::string& _value);
+}
 
 }
 

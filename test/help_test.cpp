@@ -149,7 +149,7 @@ void kkTestCase(CppliHelp) {
             "\t--interpreter,-I\tInterpreter to use\n"
             "\t\tDefault: 'python3', Implicit: 'python3'\n"
             "\t--vm-heap\tInterpreter VM max heap size\n"
-            "\t\tInt; Default: 1000, Implicit: 1000\n"
+            "\t\tNumeric; Default: 1000, Implicit: 1000\n"
         ));
     });
 }
