@@ -1,41 +1,48 @@
-#ifndef CPPLI_SRC_CPPLI_IMPL_H_
-#define CPPLI_SRC_CPPLI_IMPL_H_
+#ifndef CPPLI_IMPL_CPPLI_HPP_
+#define CPPLI_IMPL_CPPLI_HPP_
 
 #include <map>
 #include <set>
+#include <string>
 #include <vector>
 
-#include <cppli_impl/cppli_interface.hpp>
-#include "command_line_spec.hpp"
+#include <cppli_impl/argument.hpp>
+#include <cppli_impl/command_line_spec.hpp>
+#include <cppli_impl/flag.hpp>
+#include <cppli_impl/numeric_argument.hpp>
 
 namespace cppli {
 
-struct HelpGroup {
-    std::string groupName;
-    std::string content;
-};
-
-class CppliImpl: public Cppli {
+class Cppli {
  public:
-    explicit CppliImpl(const std::string& _helpPrefix);
+    typedef std::vector<std::string> ArgList;
 
-    ~CppliImpl() override;
+    explicit Cppli(const std::string& _helpPrefix);
 
-    Argument* addArgument(const ArgumentSpec& builder) override;
+    ~Cppli();
 
-    IntArgument* addIntArgument(const IntArgumentSpec& builder) override;
+    Argument* addArgument(const ArgumentSpec& builder);
 
-    Flag* addFlag(const FlagSpec& builder) override;
+    IntArgument* addIntArgument(const IntArgumentSpec& builder);
 
-    ArgList interpret(const ArgList& args) override;
+    Flag* addFlag(const FlagSpec& builder);
 
-    void addHelpFlag() override;
+    ArgList interpret(const ArgList& argv);
 
-    void checkHelpFlag() override;
+    ArgList interpret(int argc, char** argv);
 
-    // @visibleForTesting
+    void addHelpFlag();
+
+    void checkHelpFlag();
+
+    // Only public for testing.
     std::string renderHelp() const;
+
  private:
+    struct HelpGroup {
+        std::string groupName;
+        std::string content;
+    };
 
     void addHelp(const std::string& helpGroup,
                  const std::string& name,

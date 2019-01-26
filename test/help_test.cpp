@@ -5,18 +5,16 @@
 
 #include <cppli.hpp>
 
-#include <cppli_impl.hpp>
-
 using namespace cppli;
 using namespace kktest;
 using namespace kktest::core_matchers;
 using namespace std;
 
 void kkTestCase(CppliHelp) {
-    CppliImpl* cppli = nullptr;
+    Cppli* cppli = nullptr;
 
     setUp([&] {
-        cppli = new CppliImpl("Test help prefix.");
+        cppli = new Cppli("Test help prefix.");
         cppli->addHelpFlag();
     });
 

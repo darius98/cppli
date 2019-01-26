@@ -1,5 +1,5 @@
-#ifndef CPPLI_IMPL_FLAG_H_
-#define CPPLI_IMPL_FLAG_H_
+#ifndef CPPLI_IMPL_FLAG_HPP_
+#define CPPLI_IMPL_FLAG_HPP_
 
 #include <string>
 

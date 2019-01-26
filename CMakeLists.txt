@@ -8,10 +8,8 @@ set(CMAKE_INSTALL_PREFIX /usr/local/)
 add_library(cppli_objects OBJECT
     ${CMAKE_CURRENT_SOURCE_DIR}/src/argument.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/argument_impl.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/cppli_impl.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/cppli_interface.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/cppli.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/flag.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/int_argument.cpp
 )
 target_include_directories(cppli_objects PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
@@ -27,8 +25,8 @@ if (kktest)
         ${CMAKE_CURRENT_SOURCE_DIR}/test/cppli_test.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/test/help_test.cpp
     )
-    target_link_libraries(cppli_test PRIVATE kktest)
-    target_include_directories(cppli_test PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
+    target_link_libraries(cppli_test PRIVATE kktest cppli)
+    target_include_directories(cppli_test PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 else()
     message(WARNING "Cannot build test: kktest library not installed.")
 endif()

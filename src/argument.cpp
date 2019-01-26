@@ -1,6 +1,6 @@
 #include <cppli_impl/argument.hpp>
 #include <cppli_impl/flag.hpp>
-#include <cppli_impl/int_argument.hpp>
+#include <cppli_impl/numeric_argument.hpp>
 
 using namespace std;
 

@@ -1,23 +1,21 @@
 #include <iostream>
-#include <stdexcept>
 
-#include "cppli_impl.hpp"
+#include <cppli_impl/cppli.hpp>
 #include "argument_impl.hpp"
 
 using namespace std;
 
 namespace cppli {
 
-CppliImpl::CppliImpl(const string& _helpPrefix):
-        helpPrefix(_helpPrefix + "\n") {}
+Cppli::Cppli(const string& _helpPrefix): helpPrefix(_helpPrefix + "\n") {}
 
-CppliImpl::~CppliImpl() {
+Cppli::~Cppli() {
     for (CommandLineSpec* spec : commandLineSpecs) {
         delete spec;
     }
 }
 
-Argument* CppliImpl::addArgument(const ArgumentSpec& builder) {
+Argument* Cppli::addArgument(const ArgumentSpec& builder) {
     checkNameAvailability(builder.name, builder.shortName);
     auto spec = new ArgumentImpl(builder.defaultValue, builder.implicitValue);
     addSpec(spec, builder.name, builder.shortName);
@@ -26,14 +24,14 @@ Argument* CppliImpl::addArgument(const ArgumentSpec& builder) {
             builder.shortName,
             builder.description,
             "\t\tDefault: '"
-                + builder.defaultValue
-                + "', Implicit: '"
-                + builder.implicitValue
-                + "'");
+            + builder.defaultValue
+            + "', Implicit: '"
+            + builder.implicitValue
+            + "'");
     return spec;
 }
 
-IntArgument* CppliImpl::addIntArgument(const IntArgumentSpec& builder) {
+IntArgument* Cppli::addIntArgument(const IntArgumentSpec& builder) {
     checkNameAvailability(builder.name, builder.shortName);
     auto spec = new IntArgumentImpl(builder.defaultValue,
                                     builder.implicitValue);
@@ -49,7 +47,7 @@ IntArgument* CppliImpl::addIntArgument(const IntArgumentSpec& builder) {
     return spec;
 }
 
-Flag* CppliImpl::addFlag(const FlagSpec& builder) {
+Flag* Cppli::addFlag(const FlagSpec& builder) {
     checkNameAvailability(builder.name, builder.shortName);
     auto spec = new FlagImpl();
     addSpec(spec, builder.name, builder.shortName);
@@ -62,7 +60,7 @@ Flag* CppliImpl::addFlag(const FlagSpec& builder) {
     return spec;
 }
 
-CppliImpl::ArgList CppliImpl::interpret(const ArgList& args) {
+Cppli::ArgList Cppli::interpret(const ArgList& args) {
     for (CommandLineSpec* spec : commandLineSpecs) {
         spec->setDefault();
     }
@@ -149,24 +147,32 @@ CppliImpl::ArgList CppliImpl::interpret(const ArgList& args) {
     return positionalArguments;
 }
 
-void CppliImpl::addHelpFlag() {
+//Cppli::ArgList Cppli::interpret(int argc, char** argv) {
+//    ArgList args(static_cast<size_t>(argc));
+//    for (int i = 0; i < argc; ++ i) {
+//        args.emplace_back(argv[i]);
+//    }
+//    return interpret(args);
+//}
+
+void Cppli::addHelpFlag() {
     helpFlag = addFlag(FlagSpec("help")
                        .setDescription("Display this help menu.")
                        .setShortName("h"));
 }
 
-void CppliImpl::checkHelpFlag() {
+void Cppli::checkHelpFlag() {
     if (helpFlag != nullptr && helpFlag->get()) {
         cout << renderHelp() << "\n";
         exit(0);
     }
 }
 
-void CppliImpl::addHelp(const string& helpGroup,
-                        const string& name,
-                        const string& shortName,
-                        const string& description,
-                        const string& extra) {
+void Cppli::addHelp(const string& helpGroup,
+                    const string& name,
+                    const string& shortName,
+                    const string& description,
+                    const string& extra) {
     string helpLine = "\t--" + name;
     if (!shortName.empty()) {
         helpLine += ",-" + shortName;
@@ -192,7 +198,7 @@ void CppliImpl::addHelp(const string& helpGroup,
     }
 }
 
-string CppliImpl::renderHelp() const {
+string Cppli::renderHelp() const {
     string help = helpPrefix + "\n";
     for (const HelpGroup& group : helpSections) {
         help += "\n" + group.content;
@@ -200,9 +206,9 @@ string CppliImpl::renderHelp() const {
     return help;
 }
 
-void CppliImpl::addSpec(CommandLineSpec* spec,
-                        const string& name,
-                        const string& shortName) {
+void Cppli::addSpec(CommandLineSpec* spec,
+                    const string& name,
+                    const string& shortName) {
     commandLineSpecs.push_back(spec);
     reservedNames.insert(name);
     specsByCommandLineString[name] = spec;
@@ -212,8 +218,8 @@ void CppliImpl::addSpec(CommandLineSpec* spec,
     }
 }
 
-void CppliImpl::checkNameAvailability(const string& name,
-                                      const string& shortName) const {
+void Cppli::checkNameAvailability(const string& name,
+                                  const string& shortName) const {
     if (reservedNames.count(name) != 0) {
         throw runtime_error(
             "Argument tried to register " + name + " as a command-line name, "
@@ -230,21 +236,21 @@ void CppliImpl::checkNameAvailability(const string& name,
     }
 }
 
-bool CppliImpl::shouldApplyValue(const string& commandLineString) const {
+bool Cppli::shouldApplyValue(const string& commandLineString) const {
     auto specIterator = specsByCommandLineString.find(commandLineString);
     return specIterator != specsByCommandLineString.end()
            && specIterator->second->supportsValue();
 }
 
-void CppliImpl::applyValue(const string& commandLineString,
-                           const string& value) {
+void Cppli::applyValue(const string& commandLineString,
+                       const string& value) {
     auto specIterator = specsByCommandLineString.find(commandLineString);
     if (specIterator != specsByCommandLineString.end()) {
         specIterator->second->setValue(value);
     }
 }
 
-void CppliImpl::applyImplicit(const string& commandLineString) {
+void Cppli::applyImplicit(const string& commandLineString) {
     auto specIterator = specsByCommandLineString.find(commandLineString);
     if (specIterator != specsByCommandLineString.end()) {
         specIterator->second->setImplicit();

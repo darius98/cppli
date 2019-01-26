@@ -14,7 +14,7 @@ void kkTestCase(Cppli) {
     Cppli* cppli = nullptr;
 
     setUp([&] {
-        cppli = Cppli::create("Help prefix.");
+        cppli = new Cppli("Help prefix.");
     });
 
     tearDown([&] {

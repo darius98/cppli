@@ -56,29 +56,4 @@ void FlagImpl::setValue(const string& _value) {
     throw invalid_argument("Tried to give value `" + _value + "` to a flag!");
 }
 
-IntArgumentImpl::IntArgumentImpl(int _defaultValue, int _implicitValue):
-        defaultValue(_defaultValue), implicitValue(_implicitValue) {}
-
-IntArgumentImpl::~IntArgumentImpl() = default;
-
-int IntArgumentImpl::get() const {
-    return value;
-}
-
-void IntArgumentImpl::setImplicit() {
-    value = implicitValue;
-}
-
-void IntArgumentImpl::setDefault() {
-    value = defaultValue;
-}
-
-bool IntArgumentImpl::supportsValue() const {
-    return true;
-}
-
-void IntArgumentImpl::setValue(const string& _value) {
-    value = stoi(_value);
-}
-
 }

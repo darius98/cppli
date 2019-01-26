@@ -1,5 +1,5 @@
-#ifndef CPPLI_IMPL_ARGUMENT_H_
-#define CPPLI_IMPL_ARGUMENT_H_
+#ifndef CPPLI_IMPL_ARGUMENT_HPP_
+#define CPPLI_IMPL_ARGUMENT_HPP_
 
 #include <string>
 
