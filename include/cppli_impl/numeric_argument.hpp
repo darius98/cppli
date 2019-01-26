@@ -43,9 +43,7 @@ friend class Cppli;
 };
 
 template<>
-void NumericArgument<int>::setValue(const std::string& _value) {
-    value = std::stoi(_value);
-}
+void NumericArgument<int>::setValue(const std::string& _value);
 
 template<class T, class=typename std::enable_if<std::is_arithmetic<T>::value>::type>
 struct NumericArgumentSpec {

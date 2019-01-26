@@ -9,6 +9,7 @@ add_library(cppli_objects OBJECT
     ${CMAKE_CURRENT_SOURCE_DIR}/src/cppli.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/argument.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/flag.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/numeric_argument.cpp
 )
 target_include_directories(cppli_objects PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
