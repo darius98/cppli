@@ -6,10 +6,11 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build)
 set(CMAKE_INSTALL_PREFIX /usr/local/)
 
 add_library(cppli_objects OBJECT
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cppli.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/argument.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/argument_impl.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/cppli.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/flag.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/flag_impl.cpp
 )
 target_include_directories(cppli_objects PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 

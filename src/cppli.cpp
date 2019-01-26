@@ -2,6 +2,8 @@
 
 #include <cppli_impl/cppli.hpp>
 #include "argument_impl.hpp"
+#include "flag_impl.hpp"
+#include "numeric_argument_impl.hpp"
 
 using namespace std;
 
