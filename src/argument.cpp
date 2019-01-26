@@ -6,7 +6,31 @@ using namespace std;
 
 namespace cppli {
 
+Argument::Argument(string _defaultValue, string _implicitValue):
+        defaultValue(move(_defaultValue)),
+        implicitValue(move(_implicitValue)) {}
+
 Argument::~Argument() = default;
+
+string Argument::get() const {
+    return value;
+}
+
+void Argument::setDefault() {
+    value = defaultValue;
+}
+
+void Argument::setImplicit() {
+    value = implicitValue;
+}
+
+bool Argument::supportsValue() const {
+    return true;
+}
+
+void Argument::setValue(const string& _value) {
+    value = _value;
+}
 
 ArgumentSpec::ArgumentSpec(string _name): name(move(_name)) {}
 

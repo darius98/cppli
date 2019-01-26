@@ -1,9 +1,6 @@
 #include <iostream>
 
 #include <cppli_impl/cppli.hpp>
-#include "argument_impl.hpp"
-#include "flag_impl.hpp"
-#include "numeric_argument_impl.hpp"
 
 using namespace std;
 
@@ -19,7 +16,7 @@ Cppli::~Cppli() {
 
 Argument* Cppli::addArgument(const ArgumentSpec& builder) {
     checkNameAvailability(builder.name, builder.shortName);
-    auto spec = new ArgumentImpl(builder.defaultValue, builder.implicitValue);
+    auto spec = new Argument(builder.defaultValue, builder.implicitValue);
     addSpec(spec, builder.name, builder.shortName);
     addHelp(builder.helpGroup,
             builder.name,
@@ -35,8 +32,7 @@ Argument* Cppli::addArgument(const ArgumentSpec& builder) {
 
 IntArgument* Cppli::addIntArgument(const IntArgumentSpec& builder) {
     checkNameAvailability(builder.name, builder.shortName);
-    auto spec = new IntArgumentImpl(builder.defaultValue,
-                                    builder.implicitValue);
+    auto spec = new IntArgument(builder.defaultValue, builder.implicitValue);
     addSpec(spec, builder.name, builder.shortName);
     addHelp(builder.helpGroup,
             builder.name,
@@ -51,7 +47,7 @@ IntArgument* Cppli::addIntArgument(const IntArgumentSpec& builder) {
 
 Flag* Cppli::addFlag(const FlagSpec& builder) {
     checkNameAvailability(builder.name, builder.shortName);
-    auto spec = new FlagImpl();
+    auto spec = new Flag();
     addSpec(spec, builder.name, builder.shortName);
     addHelp(builder.helpGroup,
             builder.name,
@@ -149,13 +145,13 @@ Cppli::ArgList Cppli::interpret(const ArgList& args) {
     return positionalArguments;
 }
 
-//Cppli::ArgList Cppli::interpret(int argc, char** argv) {
-//    ArgList args(static_cast<size_t>(argc));
-//    for (int i = 0; i < argc; ++ i) {
-//        args.emplace_back(argv[i]);
-//    }
-//    return interpret(args);
-//}
+Cppli::ArgList Cppli::interpret(int argc, char** argv) {
+    ArgList args(static_cast<size_t>(argc));
+    for (int i = 0; i < argc; ++ i) {
+        args.emplace_back(argv[i]);
+    }
+    return interpret(args);
+}
 
 void Cppli::addHelpFlag() {
     helpFlag = addFlag(FlagSpec("help")

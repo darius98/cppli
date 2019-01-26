@@ -3,13 +3,32 @@
 
 #include <string>
 
+#include <cppli_impl/command_line_spec.hpp>
+
 namespace cppli {
 
-class Argument {
+class Argument: public CommandLineSpec {
  public:
-    virtual ~Argument();
+    ~Argument() override;
 
-    virtual std::string get() const = 0;
+    std::string get() const;
+
+ private:
+    Argument(std::string _defaultValue, std::string _implicitValue);
+
+    void setDefault() override;
+
+    void setImplicit() override;
+
+    bool supportsValue() const override;
+
+    void setValue(const std::string& _value) override;
+
+    std::string value;
+    std::string defaultValue;
+    std::string implicitValue;
+
+friend class Cppli;
 };
 
 struct ArgumentSpec {

@@ -3,13 +3,30 @@
 
 #include <string>
 
+#include <cppli_impl/command_line_spec.hpp>
+
 namespace cppli {
 
-class Flag {
+class Flag: public CommandLineSpec {
  public:
-    virtual ~Flag();
+    ~Flag() override;
 
-    virtual bool get() const = 0;
+    bool get() const;
+
+ private:
+    Flag();
+
+    void setDefault() override;
+
+    void setImplicit() override;
+
+    bool supportsValue() const override;
+
+    void setValue(const std::string& _value) override;
+
+    bool value;
+
+friend class Cppli;
 };
 
 struct FlagSpec {

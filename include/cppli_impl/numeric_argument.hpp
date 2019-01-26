@@ -4,15 +4,48 @@
 #include <string>
 #include <type_traits>
 
+#include <cppli_impl/command_line_spec.hpp>
+
 namespace cppli {
 
 template<class T, class=typename std::enable_if<std::is_arithmetic<T>::value>::type>
-class NumericArgument {
+class NumericArgument: public CommandLineSpec {
  public:
-    virtual ~NumericArgument() = default;
+    ~NumericArgument() override = default;
 
-    virtual T get() const = 0;
+    T get() const {
+        return value;
+    }
+
+ private:
+    NumericArgument(T _defaultValue, T _implicitValue):
+            defaultValue(_defaultValue), implicitValue(_implicitValue) {}
+
+    void setDefault() override {
+        value = defaultValue;
+    }
+
+    void setImplicit() override {
+        value = implicitValue;
+    }
+
+    bool supportsValue() const override {
+        return true;
+    }
+
+    void setValue(const std::string& _value) override;
+
+    T value;
+    T defaultValue;
+    T implicitValue;
+
+friend class Cppli;
 };
+
+template<>
+void NumericArgument<int>::setValue(const std::string& _value) {
+    value = std::stoi(_value);
+}
 
 template<class T, class=typename std::enable_if<std::is_arithmetic<T>::value>::type>
 struct NumericArgumentSpec {
