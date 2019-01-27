@@ -1,5 +1,3 @@
-#include <vector>
-
 #include <kktest.hpp>
 #include <kktest_ext/core_matchers.hpp>
 
@@ -17,7 +15,7 @@ void kkTestCase(Cppli) {
         cppli = Cppli("Help prefix.");
     });
 
-    group("Single string argument", [&] {
+    group("Single argument", [&] {
         Argument arg;
 
         setUp([&] {
@@ -146,76 +144,6 @@ void kkTestCase(Cppli) {
                  expect(b.get(), isEqualTo("implicit"));
                  expect(c.get(), isEqualTo("value"));
              });
-    });
-
-    group("flags", [&] {
-        Flag a;
-        Flag b;
-
-        setUp([&] {
-            a = cppli.addFlag(FlagSpec("flag_a").setShortName("a"));
-            b = cppli.addFlag(FlagSpec("flag_b").setShortName("b"));
-        });
-
-        test("Default flag value is false", [&] {
-            expect(a.get(), isFalse);
-            expect(b.get(), isFalse);
-        });
-
-        test("Implicit flag value is true", [&] {
-            cppli.interpret({"--flag_a"});
-            expect(a.get(), isTrue);
-            expect(b.get(), isFalse);
-
-            cppli.interpret({"--a"});
-            expect(a.get(), isTrue);
-            expect(b.get(), isFalse);
-
-            cppli.interpret({"-ab", "-a"});
-            expect(a.get(), isTrue);
-            expect(b.get(), isTrue);
-        });
-
-        test("Passing a flag values throws", [&] {
-            expect([&] {
-                cppli.interpret({"--flag_a=enabled"});
-            }, throws);
-        });
-
-        test("Single dash flag does not associate with the following "
-             "positional argument", [&] {
-            auto positional = cppli.interpret({"-a", "enabled"});
-            expect(positional, isEqualTo(vector<string>{"enabled"}));
-            expect(a.get(), isTrue);
-        });
-    });
-
-    group("integer arguments", [&] {
-        NumericArgument<int> arg;
-
-        setUp([&] {
-            arg = cppli.addNumericArgument(NumericArgumentSpec<int>("name")
-                                           .setShortName("n")
-                                           .setDefaultValue(0)
-                                           .setImplicitValue(1));
-        });
-
-        test("Passing an integer argument an integer value works", [&] {
-            cppli.interpret({"--name=17"});
-            expect(arg.get(), isEqualTo(17));
-
-            cppli.interpret({"--name=-7"});
-            expect(arg.get(), isEqualTo(-7));
-
-            cppli.interpret({"-n", "1337"});
-            expect(arg.get(), isEqualTo(1337));
-        });
-
-        test("Passing an integer argument a non-integer value throws", [&] {
-            expect([&] {
-                cppli.interpret({"--name=invalid"});
-            }, throws);
-        });
     });
 
     group("Invalid argument names", [&] {

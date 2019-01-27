@@ -8,6 +8,7 @@
 #include <vector>
 
 #include <cppli_impl/argument.hpp>
+#include <cppli_impl/choice_argument.hpp>
 #include <cppli_impl/command_line_spec.hpp>
 #include <cppli_impl/flag.hpp>
 #include <cppli_impl/numeric_argument.hpp>
@@ -37,9 +38,9 @@ class Cppli {
                 builder.shortName,
                 builder.description,
                 "\t\tNumeric; Default: "
-                + std::to_string(builder.defaultValue)
+                + toString(builder.defaultValue)
                 + ", Implicit: "
-                + std::to_string(builder.implicitValue));
+                + toString(builder.implicitValue));
         return NumericArgument<T>(spec);
     }
 
@@ -47,6 +48,35 @@ class Cppli {
 
     void addTerminalFlag(const FlagSpec& builder,
                          const std::function<void()>& callback);
+
+    template<class T>
+    ChoiceArgument<T> addChoiceArgument(const ChoiceArgumentSpec<T>& builder) {
+        checkNameAvailability(builder.name, builder.shortName);
+        auto spec = new detail::ChoiceArgumentDetails<T>(
+                builder.options,
+                builder.defaultValue,
+                builder.implicitValue);
+        addSpec(spec, builder.name, builder.shortName);
+        std::string renderedOptions;
+        bool first = true;
+        for (const std::pair<std::string, T>& option: builder.options) {
+            if (!first) {
+                renderedOptions += ",";
+            }
+            first = false;
+            renderedOptions += "'" + option.first + "'";
+        }
+        addHelp(builder.helpGroup,
+                builder.name,
+                builder.shortName,
+                builder.description,
+                "\t\tChoices; Default: "
+                + toString(builder.defaultValue)
+                + ", Implicit: "
+                + toString(builder.implicitValue)
+                + ", Explicit Values: [" + renderedOptions + "]");
+        return ChoiceArgument<T>(spec);
+    }
 
     ArgList interpret(const ArgList& argv);
 
@@ -80,6 +110,11 @@ class Cppli {
 
     void applyImplicit(const std::string& commandLineString);
 
+    template<class T>
+    static std::string toString(const T& value) {
+        return std::to_string(value);
+    }
+
     std::vector<detail::CommandLineSpec*> commandLineSpecs;
     std::map<std::string, detail::CommandLineSpec*> specsByCommandLineString;
 
@@ -90,6 +125,9 @@ class Cppli {
 
     std::vector<std::pair<Flag, std::function<void()>>> terminalFlags;
 };
+
+template<>
+std::string Cppli::toString(const std::string& value);
 
 }  // namespace cppli
 

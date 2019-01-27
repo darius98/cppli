@@ -242,4 +242,9 @@ void Cppli::applyImplicit(const string& commandLineString) {
     }
 }
 
+template<>
+string Cppli::toString(const string& value) {
+    return value;
+}
+
 }  // namespace cppli

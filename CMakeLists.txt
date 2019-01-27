@@ -22,7 +22,10 @@ find_library(kktest kktest /usr/local/lib/)
 
 if (kktest)
     add_executable(cppli_test EXCLUDE_FROM_ALL
+        ${CMAKE_CURRENT_SOURCE_DIR}/test/choice_argument_test.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/test/cppli_test.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/test/flag_test.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/test/numeric_argument_test.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/test/help_test.cpp
     )
     target_link_libraries(cppli_test PRIVATE kktest cppli)
