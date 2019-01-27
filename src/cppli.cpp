@@ -18,7 +18,8 @@ Cppli::~Cppli() {
 
 Argument Cppli::addArgument(const ArgumentSpec& builder) {
     checkNameAvailability(builder.name, builder.shortName);
-    auto spec = new ArgumentDetails(builder.defaultValue, builder.implicitValue);
+    auto spec = new ArgumentDetails(builder.defaultValue,
+                                    builder.implicitValue);
     addSpec(spec, builder.name, builder.shortName);
     addHelp(builder.helpGroup,
             builder.name,
