@@ -18,9 +18,11 @@ target_link_libraries(cppli PUBLIC cppli_objects)
 install(TARGETS cppli ARCHIVE DESTINATION lib)
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include DESTINATION .)
 
-find_library(kktest kktest /usr/local/lib/)
+if (NOT TARGET kktest)
+    find_library(kktest kktest /usr/local/lib/)
+endif()
 
-if (kktest)
+if (TARGET kktest OR kktest)
     add_executable(cppli_test EXCLUDE_FROM_ALL
         ${CMAKE_CURRENT_SOURCE_DIR}/test/choice_argument_test.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/test/cppli_test.cpp

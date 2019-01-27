@@ -49,6 +49,10 @@ class Cppli {
     void addTerminalFlag(const FlagSpec& builder,
                          const std::function<void()>& callback);
 
+    void addTerminalFlag(const FlagSpec& builder, const std::string& message);
+
+    void addHelpFlag();
+
     template<class T>
     ChoiceArgument<T> addChoiceArgument(const ChoiceArgumentSpec<T>& builder) {
         checkNameAvailability(builder.name, builder.shortName);

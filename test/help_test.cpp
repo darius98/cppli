@@ -16,12 +16,7 @@ void kkTestCase(CppliHelp) {
 
     setUp([&] {
         cppli = Cppli("Test help prefix.");
-        cppli.addTerminalFlag(FlagSpec("help")
-                              .setShortName("h")
-                              .setDescription("Display this help menu."),
-                              [&]() {
-            cout << cppli.renderHelp();
-        });
+        cppli.addHelpFlag();
     });
 
     test("Only with the help flag", [&] {

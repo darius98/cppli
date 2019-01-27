@@ -51,6 +51,22 @@ void Cppli::addTerminalFlag(const FlagSpec& builder,
     terminalFlags.emplace_back(addFlag(builder), callback);
 }
 
+void Cppli::addTerminalFlag(const FlagSpec& builder,
+                            const string& message) {
+    terminalFlags.emplace_back(addFlag(builder), [message] {
+        cout << message;
+    });
+}
+
+void Cppli::addHelpFlag() {
+    addTerminalFlag(FlagSpec("help")
+                    .setShortName("h")
+                    .setDescription("Display this help menu."),
+                    [&]() {
+        cout << renderHelp();
+    });
+}
+
 Cppli::ArgList Cppli::interpret(const ArgList& args) {
     for (CommandLineSpec* spec : commandLineSpecs) {
         spec->setDefault();
