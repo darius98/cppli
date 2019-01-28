@@ -14,7 +14,7 @@ add_library(cppli_objects OBJECT
 target_include_directories(cppli_objects PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 add_library(cppli $<TARGET_OBJECTS:cppli_objects>)
-target_link_libraries(cppli PUBLIC cppli_objects)
+target_include_directories(cppli PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 install(TARGETS cppli ARCHIVE DESTINATION lib)
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include DESTINATION .)
 
