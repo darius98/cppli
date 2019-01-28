@@ -71,10 +71,12 @@ class NumericArgumentDetails: public CommandLineSpec {
 
     void setDefault() override {
         value = defaultValue;
+        appearedInArgs = false;
     }
 
     void setImplicit() override {
         value = implicitValue;
+        appearedInArgs = true;
     }
 
     bool supportsValue() const override {
@@ -83,10 +85,15 @@ class NumericArgumentDetails: public CommandLineSpec {
 
     void setValue(const std::string& _value) override;
 
+    bool appeared() {
+        return appearedInArgs;
+    }
+
  private:
     T value;
     T defaultValue;
     T implicitValue;
+    bool appearedInArgs = false;
 };
 
 template<>

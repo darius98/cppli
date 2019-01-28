@@ -9,9 +9,10 @@
 namespace cppli {
 
 // Forward declaration so I can declare the accessor.
-namespace detail { class FlagDetails; }
+namespace detail { class FlagDetails; class NullableFlagDetails; }
 
 typedef detail::Accessor<detail::FlagDetails> Flag;
+typedef detail::Accessor<detail::NullableFlagDetails> NullableFlag;
 
 struct FlagSpec {
     explicit FlagSpec(std::string _name);
@@ -44,8 +45,36 @@ class FlagDetails: public CommandLineSpec {
 
     void setValue(const std::string& _value) override;
 
+    bool appeared() const;
+
  private:
     bool value;
+};
+
+class NullableFlagDetails: public CommandLineSpec {
+ public:
+    NullableFlagDetails();
+
+    ~NullableFlagDetails() override;
+
+    bool get() const;
+
+    void setDefault() override;
+
+    void setImplicit() override;
+
+    bool supportsValue() const override;
+
+    void setValue(const std::string& _value) override;
+
+    bool appeared() const;
+
+ private:
+    enum {
+        Null,
+        False,
+        True
+    } value = Null;
 };
 
 }  // namespace detail

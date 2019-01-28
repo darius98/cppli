@@ -1,6 +1,4 @@
 #include <cppli_impl/argument.hpp>
-#include <cppli_impl/flag.hpp>
-#include <cppli_impl/numeric_argument.hpp>
 
 using namespace std;
 
@@ -47,10 +45,12 @@ string ArgumentDetails::get() const {
 
 void ArgumentDetails::setDefault() {
     value = defaultValue;
+    appearedInArgs = false;
 }
 
 void ArgumentDetails::setImplicit() {
     value = implicitValue;
+    appearedInArgs = true;
 }
 
 bool ArgumentDetails::supportsValue() const {
@@ -59,6 +59,11 @@ bool ArgumentDetails::supportsValue() const {
 
 void ArgumentDetails::setValue(const string& _value) {
     value = _value;
+    appearedInArgs = true;
+}
+
+bool ArgumentDetails::appeared() const {
+    return appearedInArgs;
 }
 
 }  // namespace detail

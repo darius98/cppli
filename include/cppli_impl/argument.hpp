@@ -48,10 +48,13 @@ class ArgumentDetails: public CommandLineSpec {
 
     void setValue(const std::string& _value) override;
 
+    bool appeared() const;
+
  private:
     std::string value;
     std::string defaultValue;
     std::string implicitValue;
+    bool appearedInArgs = false;
 };
 
 }  // namespace detail

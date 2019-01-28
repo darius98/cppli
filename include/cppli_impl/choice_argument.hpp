@@ -92,10 +92,12 @@ class ChoiceArgumentDetails: public detail::CommandLineSpec {
 
     void setDefault() override {
         value = defaultValue;
+        appearedInArgs = false;
     }
 
     void setImplicit() override {
         value = implicitValue;
+        appearedInArgs = true;
     }
 
     bool supportsValue() const override {
@@ -119,6 +121,11 @@ class ChoiceArgumentDetails: public detail::CommandLineSpec {
                 + "[" + renderedOptions + "]");
         }
         value = optionsIterator->second;
+        appearedInArgs = true;
+    }
+
+    bool appeared() const {
+        return appearedInArgs;
     }
 
  private:
@@ -126,6 +133,7 @@ class ChoiceArgumentDetails: public detail::CommandLineSpec {
     std::map<std::string, T> options;
     T defaultValue;
     T implicitValue;
+    bool appearedInArgs = false;
 };
 
 }  // namespace detail

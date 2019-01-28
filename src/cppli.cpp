@@ -46,6 +46,20 @@ Flag Cppli::addFlag(const FlagSpec& builder) {
     return Flag(spec);
 }
 
+NullableFlag Cppli::addNullableFlag(const FlagSpec& builder) {
+    checkNameAvailability(builder.name, builder.shortName);
+    auto spec = new NullableFlagDetails();
+    addSpec(spec, builder.name, builder.shortName);
+    addHelp(builder.helpGroup,
+            builder.name,
+            builder.shortName,
+            builder.description,
+            "\t\tExplicit Flag; Default: false, Implicit: true, "
+            "Explicit values: '1', 'TRUE', 'ENABLED', 'true', 'enabled' "
+            "are all TRUE. Anything else is FALSE.");
+    return NullableFlag(spec);
+}
+
 void Cppli::addTerminalFlag(const FlagSpec& builder,
                             const function<void()>& callback) {
     terminalFlags.emplace_back(addFlag(builder), callback);

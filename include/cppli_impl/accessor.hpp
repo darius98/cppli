@@ -38,6 +38,15 @@ class Accessor {
         return resource->get();
     }
 
+    decltype(std::declval<T>().appeared()) appeared() const {
+        if (!isValid()) {
+            throw std::invalid_argument(
+                "Using an argument accessor that was not initialized with a "
+                "call to Cppli.add...()!");
+        }
+        return resource->appeared();
+    }
+
  private:
     const T* resource = nullptr;
 };
