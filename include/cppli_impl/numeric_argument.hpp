@@ -85,7 +85,7 @@ class NumericArgumentDetails: public CommandLineSpec {
 
     void setValue(const std::string& _value) override;
 
-    bool appeared() {
+    bool appeared() const {
         return appearedInArgs;
     }
 
