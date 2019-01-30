@@ -33,14 +33,18 @@ class Cppli {
                 builder.defaultValue,
                 builder.implicitValue);
         addSpec(spec, builder.name, builder.shortName);
+        std::string extra;
+        if (builder.defaultValue != 0 || builder.implicitValue != 0) {
+            extra = "\t\tDefault: "
+                    + toString(builder.defaultValue)
+                    + ", Implicit: "
+                    + toString(builder.implicitValue);
+        }
         addHelp(builder.helpGroup,
                 builder.name,
                 builder.shortName,
-                builder.description,
-                "\t\tNumeric; Default: "
-                + toString(builder.defaultValue)
-                + ", Implicit: "
-                + toString(builder.implicitValue));
+                "(Number)\t" + builder.description,
+                extra);
         return NumericArgument<T>(spec);
     }
 
@@ -76,11 +80,11 @@ class Cppli {
                 builder.name,
                 builder.shortName,
                 builder.description,
-                "\t\tChoices; Default: "
+                "\t\tDefault: "
                 + toString(builder.defaultValue)
                 + ", Implicit: "
                 + toString(builder.implicitValue)
-                + ", Explicit Values: [" + renderedOptions + "]");
+                + ", allowed values: [" + renderedOptions + "]");
         return ChoiceArgument<T>(spec);
     }
 

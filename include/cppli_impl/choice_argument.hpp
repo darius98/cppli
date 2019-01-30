@@ -84,8 +84,6 @@ class ChoiceArgumentDetails: public detail::CommandLineSpec {
             defaultValue(std::move(_defaultValue)),
             implicitValue(std::move(_implicitValue)) {}
 
-    ~ChoiceArgumentDetails() override = default;
-
     T get() const {
         return value;
     }
@@ -117,8 +115,8 @@ class ChoiceArgumentDetails: public detail::CommandLineSpec {
                 renderedOptions += "'" + option.first + "'";
             }
             throw std::invalid_argument(
-                "Trying to set option `" + _value + "` to field with options "
-                + "[" + renderedOptions + "]");
+                "Trying to set option `" + _value + "` to argument with "
+                "options [" + renderedOptions + "]");
         }
         value = optionsIterator->second;
         appearedInArgs = true;

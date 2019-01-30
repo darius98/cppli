@@ -5,6 +5,7 @@
 
 #include <cppli_impl/accessor.hpp>
 #include <cppli_impl/command_line_spec.hpp>
+#include <cppli_impl/choice_argument.hpp>
 
 namespace cppli {
 
@@ -51,30 +52,9 @@ class FlagDetails: public CommandLineSpec {
     bool value;
 };
 
-class NullableFlagDetails: public CommandLineSpec {
+class NullableFlagDetails: public ChoiceArgumentDetails<bool> {
  public:
     NullableFlagDetails();
-
-    ~NullableFlagDetails() override;
-
-    bool get() const;
-
-    void setDefault() override;
-
-    void setImplicit() override;
-
-    bool supportsValue() const override;
-
-    void setValue(const std::string& _value) override;
-
-    bool appeared() const;
-
- private:
-    enum {
-        Null,
-        False,
-        True
-    } value = Null;
 };
 
 }  // namespace detail

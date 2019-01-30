@@ -54,37 +54,14 @@ bool FlagDetails::appeared() const {
     return value;
 }
 
-NullableFlagDetails::NullableFlagDetails() = default;
+NullableFlagDetails::NullableFlagDetails():
+        ChoiceArgumentDetails<bool>({
+            {"1", true}, {"true", true}, {"TRUE", true},
+            {"enabled", true}, {"ENABLED", true},
 
-NullableFlagDetails::~NullableFlagDetails() = default;
-
-bool NullableFlagDetails::get() const {
-    return value == True;
-}
-
-void NullableFlagDetails::setDefault() {
-    value = Null;
-}
-
-void NullableFlagDetails::setImplicit() {
-    value = True;
-}
-
-bool NullableFlagDetails::supportsValue() const {
-    return true;
-}
-
-void NullableFlagDetails::setValue(const string& _value) {
-    value = (_value == "1"
-             || _value == "true"
-             || _value == "enabled"
-             || _value == "TRUE"
-             || _value == "ENABLED") ? True : False;
-}
-
-bool NullableFlagDetails::appeared() const {
-    return value != Null;
-}
+            {"0", false}, {"false", false}, {"FALSE", false},
+            {"disabled", false}, {"DISABLED", false}
+        }, false, true) {}
 
 }  // namespace detail
 }  // namespace cppli

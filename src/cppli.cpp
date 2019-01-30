@@ -21,15 +21,19 @@ Argument Cppli::addArgument(const ArgumentSpec& builder) {
     auto spec = new ArgumentDetails(builder.defaultValue,
                                     builder.implicitValue);
     addSpec(spec, builder.name, builder.shortName);
+    string extra;
+    if (!builder.defaultValue.empty() || !builder.implicitValue.empty()) {
+        extra = "\t\tDefault: '"
+                + builder.defaultValue
+                + "', Implicit: '"
+                + builder.implicitValue
+                + "'";
+    }
     addHelp(builder.helpGroup,
             builder.name,
             builder.shortName,
             builder.description,
-            "\t\tDefault: '"
-            + builder.defaultValue
-            + "', Implicit: '"
-            + builder.implicitValue
-            + "'");
+            extra);
     return Argument(spec);
 }
 
@@ -40,9 +44,8 @@ Flag Cppli::addFlag(const FlagSpec& builder) {
     addHelp(builder.helpGroup,
             builder.name,
             builder.shortName,
-            builder.description,
-            "\t\tFlag; Default: false, Implicit: true, "
-            "Explicit values: not supported");
+            "(Flag)\t" + builder.description,
+            "");
     return Flag(spec);
 }
 
@@ -53,10 +56,8 @@ NullableFlag Cppli::addNullableFlag(const FlagSpec& builder) {
     addHelp(builder.helpGroup,
             builder.name,
             builder.shortName,
-            builder.description,
-            "\t\tExplicit Flag; Default: false, Implicit: true, "
-            "Explicit values: '1', 'TRUE', 'ENABLED', 'true', 'enabled' "
-            "are all TRUE. Anything else is FALSE.");
+            "(Explicit Flag)\t" + builder.description,
+            "");
     return NullableFlag(spec);
 }
 
@@ -193,8 +194,10 @@ void Cppli::addHelp(const string& helpGroup,
     if (!shortName.empty()) {
         helpLine += ",-" + shortName;
     }
-    helpLine += "\t" + description + "\n";
-    helpLine += extra;
+    helpLine += "\t" + description;
+    if (!extra.empty()) {
+        helpLine += "\n" + extra;
+    }
 
     if (helpGroup.empty()) {
         helpPrefix += "\n" + helpLine;
