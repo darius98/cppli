@@ -3,6 +3,8 @@
 
 #include <map>
 #include <stdexcept>
+#include <utility>
+#include <vector>
 
 #include <cppli_impl/accessor.hpp>
 #include <cppli_impl/command_line_spec.hpp>
