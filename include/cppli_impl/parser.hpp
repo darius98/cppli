@@ -15,13 +15,13 @@
 
 namespace cppli {
 
-class Cppli {
+class Parser {
  public:
     typedef std::vector<std::string> ArgList;
 
-    explicit Cppli(const std::string& _helpPrefix);
+    explicit Parser(const std::string& _helpPrefix);
 
-    ~Cppli();
+    ~Parser();
 
     Argument addArgument(const ArgumentSpec& builder);
 
@@ -135,7 +135,7 @@ class Cppli {
 };
 
 template<>
-std::string Cppli::toString(const std::string& value);
+std::string Parser::toString(const std::string& value);
 
 }  // namespace cppli
 

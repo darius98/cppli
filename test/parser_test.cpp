@@ -8,11 +8,11 @@ using namespace kktest;
 using namespace kktest::core_matchers;
 using namespace std;
 
-void kkTestCase(Cppli) {
-    Cppli cppli("");
+void kkTestCase(Parser) {
+    Parser cppli("");
 
     setUp([&] {
-        cppli = Cppli("Help prefix.");
+        cppli = Parser("Help prefix.");
     });
 
     group("Single argument", [&] {

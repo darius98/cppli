@@ -9,10 +9,10 @@ using namespace kktest::core_matchers;
 using namespace std;
 
 void kkTestCase(CppliNumericArgument) {
-    Cppli cppli("");
+    Parser cppli("");
 
     setUp([&] {
-        cppli = Cppli("");
+        cppli = Parser("");
     });
 
     test("Passing a NumericArgument<int> an integer value works", [&] {

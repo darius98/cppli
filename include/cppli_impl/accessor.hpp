@@ -33,7 +33,7 @@ class Accessor {
         if (!isValid()) {
             throw std::invalid_argument(
                 "Using an argument accessor that was not initialized with a "
-                "call to Cppli.add...()!");
+                "call to Parser.add...()!");
         }
         return resource->get();
     }
@@ -42,7 +42,7 @@ class Accessor {
         if (!isValid()) {
             throw std::invalid_argument(
                 "Using an argument accessor that was not initialized with a "
-                "call to Cppli.add...()!");
+                "call to Parser.add...()!");
         }
         return resource->appeared();
     }

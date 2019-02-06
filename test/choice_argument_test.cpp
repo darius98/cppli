@@ -9,10 +9,10 @@ using namespace kktest::core_matchers;
 using namespace std;
 
 void kkTestCase(CppliChoiceArgument) {
-    Cppli cppli("");
+    Parser cppli("");
 
     setUp([&] {
-        cppli = Cppli("");
+        cppli = Parser("");
     });
 
     test("String choice argument, setting valid value", [&] {

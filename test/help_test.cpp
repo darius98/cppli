@@ -12,10 +12,10 @@ using namespace kktest::core_matchers;
 using namespace std;
 
 void kkTestCase(CppliHelp) {
-    Cppli cppli("");
+    Parser cppli("");
 
     setUp([&] {
-        cppli = Cppli("Test help prefix.");
+        cppli = Parser("Test help prefix.");
         cppli.addHelpFlag();
     });
 

@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include <cppli_impl/cppli.hpp>
+#include <cppli_impl/parser.hpp>
 
 using namespace std;
 
@@ -8,15 +8,15 @@ namespace cppli {
 
 using namespace detail;
 
-Cppli::Cppli(const string& _helpPrefix): helpPrefix(_helpPrefix + "\n") {}
+Parser::Parser(const string& _helpPrefix): helpPrefix(_helpPrefix + "\n") {}
 
-Cppli::~Cppli() {
+Parser::~Parser() {
     for (CommandLineSpec* spec : commandLineSpecs) {
         delete spec;
     }
 }
 
-Argument Cppli::addArgument(const ArgumentSpec& builder) {
+Argument Parser::addArgument(const ArgumentSpec& builder) {
     checkNameAvailability(builder.name, builder.shortName);
     auto spec = new ArgumentDetails(builder.defaultValue,
                                     builder.implicitValue);
@@ -37,7 +37,7 @@ Argument Cppli::addArgument(const ArgumentSpec& builder) {
     return Argument(spec);
 }
 
-Flag Cppli::addFlag(const FlagSpec& builder) {
+Flag Parser::addFlag(const FlagSpec& builder) {
     checkNameAvailability(builder.name, builder.shortName);
     auto spec = new FlagDetails();
     addSpec(spec, builder.name, builder.shortName);
@@ -49,19 +49,19 @@ Flag Cppli::addFlag(const FlagSpec& builder) {
     return Flag(spec);
 }
 
-void Cppli::addTerminalFlag(const FlagSpec& builder,
+void Parser::addTerminalFlag(const FlagSpec& builder,
                             const function<void()>& callback) {
     terminalFlags.emplace_back(addFlag(builder), callback);
 }
 
-void Cppli::addTerminalFlag(const FlagSpec& builder,
+void Parser::addTerminalFlag(const FlagSpec& builder,
                             const string& message) {
     terminalFlags.emplace_back(addFlag(builder), [message] {
         cout << message;
     });
 }
 
-void Cppli::addHelpFlag() {
+void Parser::addHelpFlag() {
     addTerminalFlag(FlagSpec("help")
                     .setShortName("h")
                     .setDescription("Display this help menu."),
@@ -70,7 +70,7 @@ void Cppli::addHelpFlag() {
     });
 }
 
-Cppli::ArgList Cppli::interpret(const ArgList& args) {
+Parser::ArgList Parser::interpret(const ArgList& args) {
     for (CommandLineSpec* spec : commandLineSpecs) {
         spec->setDefault();
     }
@@ -165,7 +165,7 @@ Cppli::ArgList Cppli::interpret(const ArgList& args) {
     return positionalArguments;
 }
 
-Cppli::ArgList Cppli::interpret(int argc, char** argv) {
+Parser::ArgList Parser::interpret(int argc, char** argv) {
     ArgList args(static_cast<size_t>(argc));
     for (int i = 0; i < argc; ++ i) {
         args.emplace_back(argv[i]);
@@ -173,7 +173,7 @@ Cppli::ArgList Cppli::interpret(int argc, char** argv) {
     return interpret(args);
 }
 
-void Cppli::addHelp(const string& helpGroup,
+void Parser::addHelp(const string& helpGroup,
                     const string& name,
                     const string& shortName,
                     const string& description,
@@ -205,7 +205,7 @@ void Cppli::addHelp(const string& helpGroup,
     }
 }
 
-string Cppli::renderHelp() const {
+string Parser::renderHelp() const {
     string help = helpPrefix + "\n";
     for (const HelpGroup& group : helpSections) {
         help += "\n" + group.content;
@@ -213,7 +213,7 @@ string Cppli::renderHelp() const {
     return help;
 }
 
-void Cppli::addSpec(CommandLineSpec* spec,
+void Parser::addSpec(CommandLineSpec* spec,
                     const string& name,
                     const string& shortName) {
     commandLineSpecs.push_back(spec);
@@ -225,7 +225,7 @@ void Cppli::addSpec(CommandLineSpec* spec,
     }
 }
 
-void Cppli::checkNameAvailability(const string& name,
+void Parser::checkNameAvailability(const string& name,
                                   const string& shortName) const {
     if (reservedNames.count(name) != 0) {
         throw runtime_error(
@@ -243,13 +243,13 @@ void Cppli::checkNameAvailability(const string& name,
     }
 }
 
-bool Cppli::shouldApplyValue(const string& commandLineString) const {
+bool Parser::shouldApplyValue(const string& commandLineString) const {
     auto specIterator = specsByCommandLineString.find(commandLineString);
     return specIterator != specsByCommandLineString.end()
            && specIterator->second->eatsPositionalArgument();
 }
 
-void Cppli::applyValue(const string& commandLineString,
+void Parser::applyValue(const string& commandLineString,
                        const string& value) {
     auto specIterator = specsByCommandLineString.find(commandLineString);
     if (specIterator != specsByCommandLineString.end()) {
@@ -257,7 +257,7 @@ void Cppli::applyValue(const string& commandLineString,
     }
 }
 
-void Cppli::applyImplicit(const string& commandLineString) {
+void Parser::applyImplicit(const string& commandLineString) {
     auto specIterator = specsByCommandLineString.find(commandLineString);
     if (specIterator != specsByCommandLineString.end()) {
         specIterator->second->setImplicit();
@@ -265,7 +265,7 @@ void Cppli::applyImplicit(const string& commandLineString) {
 }
 
 template<>
-string Cppli::toString(const string& value) {
+string Parser::toString(const string& value) {
     return value;
 }
 

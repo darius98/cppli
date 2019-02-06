@@ -9,12 +9,12 @@ using namespace kktest::core_matchers;
 using namespace std;
 
 void kkTestCase(CppliFlag) {
-    Cppli cppli("");
+    Parser cppli("");
     Flag a;
     Flag b;
 
     setUp([&] {
-        cppli = Cppli("");
+        cppli = Parser("");
         a = cppli.addFlag(FlagSpec("flag_a").setShortName("a"));
         b = cppli.addFlag(FlagSpec("flag_b").setShortName("b"));
     });

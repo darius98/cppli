@@ -6,7 +6,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build)
 set(CMAKE_INSTALL_PREFIX /usr/local/)
 
 add_library(cppli_objects OBJECT
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/cppli.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/parser.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/argument.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/flag.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/numeric_argument.cpp
@@ -25,7 +25,7 @@ endif()
 if (TARGET kktest OR kktest)
     add_executable(cppli_test EXCLUDE_FROM_ALL
         ${CMAKE_CURRENT_SOURCE_DIR}/test/choice_argument_test.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/test/cppli_test.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/test/parser_test.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/test/flag_test.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/test/numeric_argument_test.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/test/help_test.cpp
