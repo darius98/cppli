@@ -50,8 +50,6 @@ class Cppli {
 
     Flag addFlag(const FlagSpec& builder);
 
-    NullableFlag addNullableFlag(const FlagSpec& builder);
-
     void addTerminalFlag(const FlagSpec& builder,
                          const std::function<void()>& callback);
 

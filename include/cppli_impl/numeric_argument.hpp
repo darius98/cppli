@@ -79,7 +79,7 @@ class NumericArgumentDetails: public CommandLineSpec {
         appearedInArgs = true;
     }
 
-    bool supportsValue() const override {
+    bool eatsPositionalArgument() const override {
         return true;
     }
 

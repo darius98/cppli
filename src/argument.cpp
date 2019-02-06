@@ -53,7 +53,7 @@ void ArgumentDetails::setImplicit() {
     appearedInArgs = true;
 }
 
-bool ArgumentDetails::supportsValue() const {
+bool ArgumentDetails::eatsPositionalArgument() const {
     return true;
 }
 

@@ -25,36 +25,7 @@ FlagSpec& FlagSpec::setShortName(const string& _shortName) {
 
 namespace detail {
 
-FlagDetails::FlagDetails() = default;
-
-FlagDetails::~FlagDetails() = default;
-
-bool FlagDetails::get() const {
-    return value;
-}
-
-void FlagDetails::setDefault() {
-    value = false;
-}
-
-void FlagDetails::setImplicit() {
-    value = true;
-}
-
-bool FlagDetails::supportsValue() const {
-    return false;
-}
-
-void FlagDetails::setValue(const string& _value) {
-    throw invalid_argument("Tried to give value `" + _value + "` to a flag!");
-}
-
-bool FlagDetails::appeared() const {
-    // A flag appears iff it is set to TRUE.
-    return value;
-}
-
-NullableFlagDetails::NullableFlagDetails():
+FlagDetails::FlagDetails():
         ChoiceArgumentDetails<bool>({
             {"1", true}, {"true", true}, {"TRUE", true},
             {"enabled", true}, {"ENABLED", true},
@@ -62,6 +33,10 @@ NullableFlagDetails::NullableFlagDetails():
             {"0", false}, {"false", false}, {"FALSE", false},
             {"disabled", false}, {"DISABLED", false}
         }, false, true) {}
+
+bool FlagDetails::eatsPositionalArgument() const {
+    return false;
+}
 
 }  // namespace detail
 }  // namespace cppli

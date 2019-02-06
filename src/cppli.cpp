@@ -49,18 +49,6 @@ Flag Cppli::addFlag(const FlagSpec& builder) {
     return Flag(spec);
 }
 
-NullableFlag Cppli::addNullableFlag(const FlagSpec& builder) {
-    checkNameAvailability(builder.name, builder.shortName);
-    auto spec = new NullableFlagDetails();
-    addSpec(spec, builder.name, builder.shortName);
-    addHelp(builder.helpGroup,
-            builder.name,
-            builder.shortName,
-            "(Explicit Flag)\t" + builder.description,
-            "");
-    return NullableFlag(spec);
-}
-
 void Cppli::addTerminalFlag(const FlagSpec& builder,
                             const function<void()>& callback) {
     terminalFlags.emplace_back(addFlag(builder), callback);
@@ -258,7 +246,7 @@ void Cppli::checkNameAvailability(const string& name,
 bool Cppli::shouldApplyValue(const string& commandLineString) const {
     auto specIterator = specsByCommandLineString.find(commandLineString);
     return specIterator != specsByCommandLineString.end()
-           && specIterator->second->supportsValue();
+           && specIterator->second->eatsPositionalArgument();
 }
 
 void Cppli::applyValue(const string& commandLineString,

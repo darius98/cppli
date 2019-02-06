@@ -100,7 +100,7 @@ class ChoiceArgumentDetails: public detail::CommandLineSpec {
         appearedInArgs = true;
     }
 
-    bool supportsValue() const override {
+    bool eatsPositionalArgument() const override {
         return true;
     }
 

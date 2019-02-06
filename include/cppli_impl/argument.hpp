@@ -44,7 +44,7 @@ class ArgumentDetails: public CommandLineSpec {
 
     void setImplicit() override;
 
-    bool supportsValue() const override;
+    bool eatsPositionalArgument() const override;
 
     void setValue(const std::string& _value) override;
 

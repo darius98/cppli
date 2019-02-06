@@ -10,10 +10,9 @@
 namespace cppli {
 
 // Forward declaration so I can declare the accessor.
-namespace detail { class FlagDetails; class NullableFlagDetails; }
+namespace detail { class FlagDetails; }
 
 typedef detail::Accessor<detail::FlagDetails> Flag;
-typedef detail::Accessor<detail::NullableFlagDetails> NullableFlag;
 
 struct FlagSpec {
     explicit FlagSpec(std::string _name);
@@ -30,31 +29,11 @@ struct FlagSpec {
 
 namespace detail {
 
-class FlagDetails: public CommandLineSpec {
+class FlagDetails: public ChoiceArgumentDetails<bool> {
  public:
     FlagDetails();
 
-    ~FlagDetails() override;
-
-    bool get() const;
-
-    void setDefault() override;
-
-    void setImplicit() override;
-
-    bool supportsValue() const override;
-
-    void setValue(const std::string& _value) override;
-
-    bool appeared() const;
-
- private:
-    bool value;
-};
-
-class NullableFlagDetails: public ChoiceArgumentDetails<bool> {
- public:
-    NullableFlagDetails();
+    bool eatsPositionalArgument() const override;
 };
 
 }  // namespace detail
