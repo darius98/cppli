@@ -7,26 +7,26 @@ namespace detail {
 
 template<>
 void NumericArgumentDetails<char>::setValue(const string& _value) {
-    value = stoi(_value);
+    value = static_cast<char>(stoi(_value));
     appearedInArgs = true;
 }
 
 template<>
 void NumericArgumentDetails<unsigned char>::setValue(const string& _value) {
-    value = stoul(_value);
+    value = static_cast<unsigned char>(stoul(_value));
     appearedInArgs = true;
 }
 
 template<>
 void NumericArgumentDetails<short int>::setValue(const string& _value) {
-    value = stoi(_value);
+    value = static_cast<short>(stoi(_value));
     appearedInArgs = true;
 }
 
 template<>
 void NumericArgumentDetails<unsigned short int>::setValue(
         const string& _value) {
-    value = stoul(_value);
+    value = static_cast<unsigned short>(stoul(_value));
     appearedInArgs = true;
 }
 
@@ -38,7 +38,7 @@ void NumericArgumentDetails<int>::setValue(const string& _value) {
 
 template<>
 void NumericArgumentDetails<unsigned int>::setValue(const string& _value) {
-    value = stoul(_value);
+    value = static_cast<unsigned int>(stoul(_value));
     appearedInArgs = true;
 }
 
