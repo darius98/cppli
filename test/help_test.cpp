@@ -2,13 +2,13 @@
 #include <vector>
 
 #include <kktest.hpp>
-#include <kktest_ext/core_matchers.hpp>
+#include <kktest_ext/matchers.hpp>
 
 #include <cppli.hpp>
 
 using namespace cppli;
 using namespace kktest;
-using namespace kktest::core_matchers;
+using namespace kktest::matchers;
 using namespace std;
 
 void kkTestCase(CppliHelp) {
