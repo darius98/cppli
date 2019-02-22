@@ -21,6 +21,7 @@ endif()
 if (TARGET kktest)
     # We have access to the kktest CMAKE scripts.
     add_kktest(cppli_test
+        ${CMAKE_CURRENT_SOURCE_DIR}/test/main.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/test/choice_argument_test.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/test/parser_test.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/test/flag_test.cpp
@@ -30,6 +31,7 @@ if (TARGET kktest)
     target_link_libraries(cppli_test cppli)
 elseif (kktest)
     add_executable(cppli_test
+        ${CMAKE_CURRENT_SOURCE_DIR}/test/main.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/test/choice_argument_test.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/test/parser_test.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/test/flag_test.cpp

@@ -8,7 +8,7 @@ using namespace kktest;
 using namespace kktest::matchers;
 using namespace std;
 
-void kkTestCase(Parser) {
+void parserTest() {
     Parser cppli("");
 
     setUp([&] {
