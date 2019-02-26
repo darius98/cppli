@@ -9,7 +9,7 @@ extern void parserTest();
 extern void helpTest();
 
 int main(int argc, char** argv) {
-    return run(argc, argv, {
+    return initAndRun(argc, argv, {
         TestCase(choiceArgumentTest, "ChoiceArgument"),
         TestCase(flagTest, "Flag"),
         TestCase(numericArgumentTest, "NumericArgument"),
