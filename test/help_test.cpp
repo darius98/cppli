@@ -23,8 +23,7 @@ void helpTest() {
         expect(cppli.renderHelp(), isEqualTo(
             "Test help prefix.\n"
             "\n"
-            "\t--help,-h\tDisplay this help menu.\n"
-            "\t\tFlag; Default: false, Implicit: true, Explicit values: not supported\n"
+            "\t--help,-h\t(Flag)\tDisplay this help menu.\n"
         ));
     });
 
@@ -35,10 +34,8 @@ void helpTest() {
         expect(cppli.renderHelp(), isEqualTo(
             "Test help prefix.\n"
             "\n"
-            "\t--help,-h\tDisplay this help menu.\n"
-            "\t\tFlag; Default: false, Implicit: true, Explicit values: not supported\n"
-            "\t--version,-v\tDisplay program version\n"
-            "\t\tFlag; Default: false, Implicit: true, Explicit values: not supported\n"
+            "\t--help,-h\t(Flag)\tDisplay this help menu.\n"
+            "\t--version,-v\t(Flag)\tDisplay program version\n"
         ));
     });
 
@@ -50,8 +47,7 @@ void helpTest() {
         expect(cppli.renderHelp(), isEqualTo(
             "Test help prefix.\n"
             "\n"
-            "\t--help,-h\tDisplay this help menu.\n"
-            "\t\tFlag; Default: false, Implicit: true, Explicit values: not supported\n"
+            "\t--help,-h\t(Flag)\tDisplay this help menu.\n"
             "\t--config\tFile to take config from\n"
             "\t\tDefault: '/path/to/default-config.txt', Implicit: './config.txt'\n"
         ));
@@ -66,8 +62,7 @@ void helpTest() {
         expect(cppli.renderHelp(), isEqualTo(
             "Test help prefix.\n"
             "\n"
-            "\t--help,-h\tDisplay this help menu.\n"
-            "\t\tFlag; Default: false, Implicit: true, Explicit values: not supported\n"
+            "\t--help,-h\t(Flag)\tDisplay this help menu.\n"
             "\n"
             "Config\n"
             "\t--config\tFile to take config from\n"
@@ -90,8 +85,7 @@ void helpTest() {
         expect(cppli.renderHelp(), isEqualTo(
             "Test help prefix.\n"
             "\n"
-            "\t--help,-h\tDisplay this help menu.\n"
-            "\t\tFlag; Default: false, Implicit: true, Explicit values: not supported\n"
+            "\t--help,-h\t(Flag)\tDisplay this help menu.\n"
             "\n"
             "Config\n"
             "\t--config\tFile to take config from\n"
@@ -135,10 +129,8 @@ void helpTest() {
         expect(cppli.renderHelp(), isEqualTo(
             "Test help prefix.\n"
             "\n"
-            "\t--help,-h\tDisplay this help menu.\n"
-            "\t\tFlag; Default: false, Implicit: true, Explicit values: not supported\n"
-            "\t--version,-v\tDisplay program version\n"
-            "\t\tFlag; Default: false, Implicit: true, Explicit values: not supported\n"
+            "\t--help,-h\t(Flag)\tDisplay this help menu.\n"
+            "\t--version,-v\t(Flag)\tDisplay program version\n"
             "\n"
             "Config\n"
             "\t--config\tFile to take config from\n"
@@ -149,8 +141,8 @@ void helpTest() {
             "Runtime\n"
             "\t--interpreter,-I\tInterpreter to use\n"
             "\t\tDefault: 'python3', Implicit: 'python3'\n"
-            "\t--vm-heap\tInterpreter VM max heap size\n"
-            "\t\tNumeric; Default: 1000, Implicit: 1000\n"
+            "\t--vm-heap\t(Number)\tInterpreter VM max heap size\n"
+            "\t\tDefault: 1000, Implicit: 1000\n"
         ));
     });
 }

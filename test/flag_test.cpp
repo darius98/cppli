@@ -38,9 +38,14 @@ void flagTest() {
         expect(b.get(), isTrue);
     });
 
-    test("Passing a flag values throws", [&] {
+    test("Passing a flag value 'enabled' enables it", [&] {
+        cppli.interpret({"--flag_a=enabled"});
+        expect(a.get(), isTrue);
+    });
+
+    test("Passing a flag random values throws", [&] {
         expect([&] {
-            cppli.interpret({"--flag_a=enabled"});
+            cppli.interpret({"--flag_a=whatever"});
         }, throwsA<invalid_argument>());
     });
 

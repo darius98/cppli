@@ -84,7 +84,9 @@ class ChoiceArgumentDetails: public detail::CommandLineSpec {
                           T _implicitValue):
             options(std::move(_options)),
             defaultValue(std::move(_defaultValue)),
-            implicitValue(std::move(_implicitValue)) {}
+            implicitValue(std::move(_implicitValue)) {
+        value = defaultValue;
+    }
 
     T get() const {
         return value;
