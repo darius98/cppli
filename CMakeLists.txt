@@ -1,10 +1,6 @@
 cmake_minimum_required(VERSION 3.7)
 set(CMAKE_CXX_STANDARD 11)
 
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build)
-
-set(CMAKE_INSTALL_PREFIX /usr/local/)
-
 add_library(cppli
     ${CMAKE_CURRENT_SOURCE_DIR}/src/parser.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/argument.cpp
