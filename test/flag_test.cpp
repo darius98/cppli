@@ -1,5 +1,7 @@
 #include <kktest.hpp>
-#include <kktest_ext/matchers.hpp>
+#include <kktest_ext/matchers/comparison.hpp>
+#include <kktest_ext/matchers/functional.hpp>
+#include <kktest_ext/matchers/truth.hpp>
 
 #include <cppli.hpp>
 
