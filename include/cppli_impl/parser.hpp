@@ -33,19 +33,15 @@ class Parser {
                 builder.defaultValue,
                 builder.implicitValue);
         addSpec(spec, builder.name, builder.shortName);
-        std::string extra;
-        if (builder.defaultValue != 0 || builder.implicitValue != 0) {
-            extra = "Default: "
-                    + toString(builder.defaultValue)
-                    + ", Implicit: "
-                    + toString(builder.implicitValue);
-        }
         addHelp(builder.helpGroup,
                 builder.name,
                 builder.shortName,
                 "(Number) " + builder.description,
                 !builder.description.empty(),
-                extra);
+                "Default: "
+                + toString(builder.defaultValue)
+                + ", Implicit: "
+                + toString(builder.implicitValue));
         return NumericArgument<T>(spec);
     }
 
