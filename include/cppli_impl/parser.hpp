@@ -35,7 +35,7 @@ class Parser {
         addSpec(spec, builder.name, builder.shortName);
         std::string extra;
         if (builder.defaultValue != 0 || builder.implicitValue != 0) {
-            extra = "\t\tDefault: "
+            extra = "Default: "
                     + toString(builder.defaultValue)
                     + ", Implicit: "
                     + toString(builder.implicitValue);
@@ -43,7 +43,8 @@ class Parser {
         addHelp(builder.helpGroup,
                 builder.name,
                 builder.shortName,
-                "(Number)\t" + builder.description,
+                "(Number) " + builder.description,
+                !builder.description.empty(),
                 extra);
         return NumericArgument<T>(spec);
     }
@@ -78,7 +79,8 @@ class Parser {
                 builder.name,
                 builder.shortName,
                 builder.description,
-                "\t\tDefault: "
+                !builder.description.empty(),
+                "Default: "
                 + toString(builder.defaultValue)
                 + ", Implicit: "
                 + toString(builder.implicitValue)
@@ -102,6 +104,7 @@ class Parser {
                  const std::string& name,
                  const std::string& shortName,
                  const std::string& description,
+                 bool newLineBeforeExtra,
                  const std::string& extra);
 
     void addSpec(detail::CommandLineSpec* spec,

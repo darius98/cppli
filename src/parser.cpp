@@ -23,7 +23,7 @@ Argument Parser::addArgument(const ArgumentSpec& builder) {
     addSpec(spec, builder.name, builder.shortName);
     string extra;
     if (!builder.defaultValue.empty() || !builder.implicitValue.empty()) {
-        extra = "\t\tDefault: '"
+        extra = "Default: '"
                 + builder.defaultValue
                 + "', Implicit: '"
                 + builder.implicitValue
@@ -33,6 +33,7 @@ Argument Parser::addArgument(const ArgumentSpec& builder) {
             builder.name,
             builder.shortName,
             builder.description,
+            !builder.description.empty(),
             extra);
     return Argument(spec);
 }
@@ -44,7 +45,8 @@ Flag Parser::addFlag(const FlagSpec& builder) {
     addHelp(builder.helpGroup,
             builder.name,
             builder.shortName,
-            "(Flag)\t" + builder.description,
+            "(Flag) " + builder.description,
+            !builder.description.empty(),
             "");
     return Flag(spec);
 }
@@ -177,14 +179,18 @@ void Parser::addHelp(const string& helpGroup,
                     const string& name,
                     const string& shortName,
                     const string& description,
+                    bool newLineBeforeExtra,
                     const string& extra) {
     string helpLine = "\t--" + name;
     if (!shortName.empty()) {
         helpLine += ",-" + shortName;
     }
-    helpLine += "\t" + description;
+    helpLine += " " + description;
     if (!extra.empty()) {
-        helpLine += "\n" + extra;
+        if (newLineBeforeExtra) {
+            helpLine += "\n";
+        }
+        helpLine += extra;
     }
 
     if (helpGroup.empty()) {
